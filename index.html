@@ -8,7 +8,7 @@
 <!-- Compact, crisp fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
   
 <!-- Supabase & Lucide Icons -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -21,45 +21,58 @@
 
 <style>
   :root {
+    /* -- PRIDE 8-COLOR PROGRESS FLAG -- */
+    --pride-red:    #E40303;
+    --pride-orange: #FF8C00;
+    --pride-yellow: #FFED00;
+    --pride-green:  #008026;
+    --pride-blue:   #004DFF;
+    --pride-violet: #750787;
+    --pride-white:  #FFFFFF;
+    --pride-black:  #000000;
+    /* Progress additions */
+    --pride-brown:  #613915;
+    --pride-pink:   #FF76A4;
+    --pride-lblue:  #74D7EE;
+
     /* -- LIGHT MODE -- */
-    --bg-app: #f4f4f5;
+    --bg-app: #fdf4ff;
     --bg-card: #ffffff;
-    --bg-input: #fafafa;
-    --bg-hover: #e4e4e7;
-    
-    --border: #e4e4e7;
-    --border-strong: #d4d4d8;
-    
-    --accent: #d9f950;       /* Meiro Tea Green */
-    --accent-hover: #c4ec2a;
-    --accent-text: #09090b;
-    
-    --text-main: #09090b;
-    --text-dim: #71717a;
-    --text-muted: #a1a1aa;
-    
-    --shadow-card: 0 2px 8px -2px rgba(0,0,0,0.05);
+    --bg-input: #fdf0ff;
+    --bg-hover: #f3e8ff;
+
+    --border: #e9d5ff;
+    --border-strong: #c084fc;
+
+    --accent: #FF8C00;
+    --accent-hover: #E67A00;
+    --accent-text: #fff;
+
+    --text-main: #1a0033;
+    --text-dim: #7c3aed;
+    --text-muted: #a78bfa;
+
+    --shadow-card: 0 2px 12px -2px rgba(139,0,255,0.12);
   }
 
   [data-theme="dark"] {
-    /* -- DARK MODE (Meiro Aesthetic) -- */
-    --bg-app: #09090b;       /* Very deep background */
-    --bg-card: #18181b;      /* Card surface */
-    --bg-input: #121214;     /* Input background */
-    --bg-hover: #27272a;     /* Hover states */
-    
-    --border: #27272a;
-    --border-strong: #3f3f46;
-    
-    --accent: #d9f950;       /* Meiro Tea Green */
-    --accent-hover: #bef222;
-    --accent-text: #09090b;
-    
-    --text-main: #fafafa;
-    --text-dim: #a1a1aa;
-    --text-muted: #52525b;
-    
-    --shadow-card: 0 8px 16px -4px rgba(0,0,0,0.4);
+    --bg-app: #0d0014;
+    --bg-card: #1a0030;
+    --bg-input: #12001f;
+    --bg-hover: #2d0050;
+
+    --border: #3b006b;
+    --border-strong: #7c00c8;
+
+    --accent: #FF8C00;
+    --accent-hover: #ffaa33;
+    --accent-text: #fff;
+
+    --text-main: #f9f0ff;
+    --text-dim: #c084fc;
+    --text-muted: #7c3aed;
+
+    --shadow-card: 0 8px 20px -4px rgba(180,0,255,0.3);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -70,7 +83,7 @@
   body { 
     background-color: var(--bg-app); 
     color: var(--text-main); 
-    font-family: 'Inter', sans-serif; 
+    font-family: 'Nunito', sans-serif; 
     min-height: 100vh; 
     display: flex;
     flex-direction: column;
@@ -92,17 +105,37 @@
   
   main { flex: 1; display: flex; flex-direction: column; padding-bottom: 32px; }
 
+  /* -- PRIDE RAINBOW BAR -- */
+  .pride-bar {
+    height: 5px;
+    background: linear-gradient(90deg,
+      #000000 0%, #000000 12.5%,
+      #613915 12.5%, #613915 25%,
+      #E40303 25%, #E40303 37.5%,
+      #FF8C00 37.5%, #FF8C00 50%,
+      #FFED00 50%, #FFED00 62.5%,
+      #008026 62.5%, #008026 75%,
+      #004DFF 75%, #004DFF 87.5%,
+      #750787 87.5%, #750787 100%
+    );
+    width: 100%;
+    margin: 0;
+    border-radius: 0 0 4px 4px;
+  }
+
   /* -- HEADER -- */
   header { 
     display: flex; align-items: center; justify-content: space-between; 
-    padding: 24px 0 16px; 
+    padding: 20px 0 14px; 
   }
   .logo-wrap { display: flex; align-items: center; gap: 8px; }
-  .logo { font-size: 1.15rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.02em; }
-  .logo-icon { color: var(--accent); }
+  .logo { font-size: 1.25rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.01em; font-family: 'Fredoka One', cursive; }
+  .logo-icon { color: var(--pride-violet); }
+  .logo-rainbow { background: linear-gradient(90deg, #E40303, #FF8C00, #FFED00, #008026, #004DFF, #750787); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
   .badge { 
-    font-size: 0.65rem; font-weight: 600; padding: 2px 8px; border-radius: 6px;
-    background: var(--bg-hover); color: var(--text-dim); border: 1px solid var(--border);
+    font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 6px;
+    background: linear-gradient(90deg, #FF76A4, #74D7EE); color: #1a0033; border: none;
+    font-family: 'Fredoka One', cursive; letter-spacing: 0.05em;
   }
   
   /* Header Navigation & Actions */
@@ -138,82 +171,122 @@
   .mobile-menu { display: none; }
 
   /* -- HERO -- */
-  .hero { text-align: center; padding: 24px 0 32px; }
+  .hero { text-align: center; padding: 28px 0 20px; }
   .hero h1 { 
-    font-size: 1.8rem; font-weight: 700; line-height: 1.1; 
-    letter-spacing: -0.03em; margin-bottom: 8px; color: var(--text-main);
+    font-size: 2rem; font-weight: 700; line-height: 1.15; 
+    letter-spacing: 0.01em; margin-bottom: 8px; color: var(--text-main);
+    font-family: 'Fredoka One', cursive;
+    background: linear-gradient(90deg, #E40303 0%, #FF8C00 20%, #FFED00 38%, #008026 55%, #004DFF 75%, #750787 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .hero p { color: var(--text-dim); font-size: 0.95rem; max-width: 420px; margin: 0 auto; line-height: 1.5; }
+  .hero p { color: var(--text-dim); font-size: 0.9rem; max-width: 340px; margin: 0 auto; line-height: 1.5; }
 
-  /* -- MAIN CONTROL CARD -- */
-  .control-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
+  /* -- RECOVER CARD (main focus) -- */
+  .recover-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px; margin-bottom: 28px;
     box-shadow: var(--shadow-card);
-    margin-bottom: 32px;
+    border-top: 4px solid transparent;
+    border-image: linear-gradient(90deg, #E40303, #FF8C00, #FFED00, #008026, #004DFF, #750787) 1;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
   }
-  
-  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .card-title { font-size: 0.85rem; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px;}
-  
-  /* Sync Status */
-  .sync-status { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace;}
-  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse-green 2s infinite; }
-  @keyframes pulse-green {
-    0% { box-shadow: 0 0 0 0 rgba(217, 249, 80, 0.4); }
-    70% { box-shadow: 0 0 0 4px rgba(217, 249, 80, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(217, 249, 80, 0); }
+  .recover-card::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #E40303, #FF8C00, #FFED00, #008026, #004DFF, #750787);
+    border-radius: 16px 16px 0 0;
   }
-
-  /* Alias Display Field */
-  .alias-field {
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 16px;
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 16px; transition: border-color 0.2s;
+  .recover-label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.75rem; font-weight: 800; color: var(--pride-violet);
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;
+    font-family: 'Nunito', sans-serif;
   }
-  .alias-field:hover { border-color: var(--border-strong); }
+  .recover-row { display: flex; gap: 8px; }
+  .recover-input { flex: 1; border-radius: 999px; }
+  .recover-btn { flex-shrink: 0; padding: 10px 18px; }
+  .active-alias-row {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border);
+  }
+  .active-alias-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; flex-shrink: 0; }
   .alias-text {
-    font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 500;
+    font-family: "Space Mono", monospace; font-size: 0.82rem; font-weight: 500;
     color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     user-select: all; cursor: text;
   }
 
+  /* -- GENERATE SECTION (tucked away) -- */
+  .generate-section {
+    margin-top: 32px; padding-top: 20px;
+    border-top: 1px dashed var(--border);
+  }
+  .generate-toggle {
+    background: transparent; border: none; color: var(--text-muted);
+    font-size: 0.8rem; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; gap: 5px; transition: color 0.2s;
+    padding: 0; font-family: 'Nunito', sans-serif;
+  }
+  .generate-toggle:hover { color: var(--pride-violet); }
+  .generate-toggle.open #generateChevron { transform: rotate(180deg); }
+  #generateChevron { transition: transform 0.2s; }
+  .generate-panel {
+    margin-top: 14px; background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px; animation: fadeIn 0.2s ease;
+  }
+  .generate-alias-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px; gap: 8px;
+  }
+  .alias-text-sm {
+    font-family: "Space Mono", monospace; font-size: 0.8rem; font-weight: 500;
+    color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .btn-icon-copy {
+    background: var(--bg-hover); border: 1px solid var(--border); color: var(--text-dim);
+    border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center;
+    justify-content: center; cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+  }
+  .btn-icon-copy:hover { color: var(--text-main); border-color: var(--border-strong); }
+  .generate-btns { display: flex; gap: 8px; }
+  .btn-sm-pill { padding: 8px 14px; font-size: 0.8rem; }
+
+  /* pulse-green kept for live dot */
+  @keyframes pulse-green {
+    0% { box-shadow: 0 0 0 0 rgba(117, 7, 135, 0.5); }
+    70% { box-shadow: 0 0 0 4px rgba(117, 7, 135, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(117, 7, 135, 0); }
+  }
+
   /* Meiro Pill Buttons */
-  .actions-grid { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center;}
-  .actions-secondary { display: flex; gap: 8px; }
-  
   .btn-pill {
     border-radius: 999px; /* Core Meiro styling */
-    padding: 10px 18px; font-size: 0.9rem; font-weight: 600; font-family: 'Inter', sans-serif;
+    padding: 10px 18px; font-size: 0.9rem; font-weight: 600; font-family: 'Nunito', sans-serif;
     cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
     transition: all 0.2s ease; border: none; outline: none; white-space: nowrap;
   }
-  .btn-primary { background: var(--accent); color: var(--accent-text); }
-  .btn-primary:hover { background: var(--accent-hover); transform: scale(1.02); }
+  .btn-primary { 
+    background: linear-gradient(135deg, #FF8C00, #E40303); 
+    color: #fff; border: none;
+  }
+  .btn-primary:hover { 
+    background: linear-gradient(135deg, #FFED00, #FF8C00, #E40303);
+    transform: scale(1.02); 
+  }
   
   .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
   .btn-outline:hover { background: var(--bg-hover); border-color: var(--border-strong); }
   
   .btn-icon-only { padding: 10px; border-radius: 50%; width: 38px; height: 38px; }
 
-  /* Recover Input (Hidden by default) */
-  .recover-box { 
-    display: none; align-items: center; gap: 8px; margin-top: 12px; 
-    padding-top: 12px; border-top: 1px dashed var(--border);
-    animation: fadeIn 0.2s ease;
-  }
-  .recover-box.active { display: flex; }
   .input-minimal {
     flex: 1; background: var(--bg-input); border: 1px solid var(--border);
-    border-radius: 999px; padding: 10px 16px; font-family: 'JetBrains Mono', monospace;
+    border-radius: 999px; padding: 10px 16px; font-family: 'Space Mono', monospace;
     font-size: 0.85rem; color: var(--text-main); outline: none; transition: border-color 0.2s;
   }
-  .input-minimal:focus { border-color: var(--accent); }
+  .input-minimal:focus { border-color: var(--pride-violet); }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
   /* -- INBOX -- */
@@ -221,8 +294,8 @@
     display: flex; align-items: center; justify-content: space-between; 
     margin-bottom: 12px; padding: 0 4px;
   }
-  .inbox-title { font-size: 1.1rem; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
-  .badge-count { background: var(--bg-card); border: 1px solid var(--border); padding: 2px 8px; border-radius: 999px; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace;}
+  .inbox-title { font-size: 1.1rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; font-family: 'Fredoka One', cursive; letter-spacing: 0.02em; }
+  .badge-count { background: var(--bg-card); border: 1px solid var(--border); padding: 2px 8px; border-radius: 999px; font-size: 0.8rem; font-family: 'Space Mono', monospace;}
   
   .btn-text {
     background: transparent; border: none; color: var(--text-dim);
@@ -236,28 +309,28 @@
   .btn-refresh {
     background: transparent; border: 1px solid var(--border); color: var(--text-dim);
     cursor: pointer; height: 30px; padding: 0 10px; display: flex; align-items: center; gap: 5px;
-    border-radius: 999px; font-size: 0.8rem; font-weight: 500; font-family: 'Inter', sans-serif;
+    border-radius: 999px; font-size: 0.8rem; font-weight: 500; font-family: 'Nunito', sans-serif;
     transition: all 0.2s; white-space: nowrap;
   }
-  .btn-refresh:hover { color: var(--accent); border-color: var(--accent); background: rgba(217,249,80,0.06); }
+  .btn-refresh:hover { color: var(--pride-violet); border-color: var(--pride-violet); background: rgba(217,249,80,0.06); }
   .btn-refresh:active { transform: scale(0.95); }
   .btn-refresh.spinning svg { animation: spin 0.6s linear infinite; }
-  .btn-refresh.spinning { pointer-events: none; color: var(--accent); border-color: var(--accent); }
+  .btn-refresh.spinning { pointer-events: none; color: var(--pride-violet); border-color: var(--pride-violet); }
 
   /* -- LIVE SYNC BAR -- */
   .live-bar {
     display: flex; align-items: center; gap: 6px;
-    font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; color: var(--text-muted); font-family: 'Space Mono', monospace;
     padding: 0 4px; margin-bottom: 8px;
     transition: color 0.3s;
   }
-  .live-bar.active { color: var(--accent); }
+  .live-bar.active { color: var(--pride-violet); }
   .live-pulse {
     width: 5px; height: 5px; border-radius: 50%; background: var(--text-muted);
     transition: background 0.3s;
     flex-shrink: 0;
   }
-  .live-bar.active .live-pulse { background: var(--accent); animation: pulse-green 1.5s infinite; }
+  .live-bar.active .live-pulse { background: var(--pride-violet); animation: pulse-green 1.5s infinite; }
   .live-bar.offline .live-pulse { background: #ef4444; }
   .live-bar.offline { color: #ef4444; }
 
@@ -275,7 +348,7 @@
   /* Loading Spinner */
   .spinner {
     width: 24px; height: 24px; border: 2px solid var(--border-strong);
-    border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite;
+    border-top-color: var(--pride-violet); border-radius: 50%; animation: spin 0.8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -290,22 +363,22 @@
   .email-item:hover { border-color: var(--border-strong); transform: translateY(-1px); }
   
   .email-dot { width: 8px; height: 8px; border-radius: 50%; background: transparent; }
-  .email-item.unread .email-dot { background: var(--accent); box-shadow: 0 0 6px rgba(217, 249, 80, 0.4); }
+  .email-item.unread .email-dot { background: var(--accent); box-shadow: 0 0 6px rgba(117, 7, 135, 0.5); }
   
   .email-content { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .email-sender { font-weight: 600; font-size: 0.95rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .email-subject { font-size: 0.85rem; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500;}
-  .email-time { font-size: 0.8rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; white-space: nowrap;}
+  .email-time { font-size: 0.8rem; color: var(--text-dim); font-family: 'Space Mono', monospace; white-space: nowrap;}
 
   /* OTP chip on email list */
   .otp-chip {
     display: inline-flex; align-items: center; gap: 5px;
-    background: #d9f950; border: 1px solid #b8d930;
-    color: #1a2000; border-radius: 6px; padding: 2px 8px;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700;
+    background: linear-gradient(90deg,#FF76A4,#74D7EE); border: none;
+    color: #1a0033; border-radius: 6px; padding: 2px 8px;
+    font-family: 'Space Mono', monospace; font-size: 0.78rem; font-weight: 700;
     cursor: pointer; transition: all 0.15s; margin-top: 4px; width: fit-content;
   }
-  [data-theme="dark"] .otp-chip { background: rgba(217,249,80,0.15); border-color: rgba(217,249,80,0.4); color: #d9f950; }
+  [data-theme="dark"] .otp-chip { background: rgba(255,118,164,0.2); border-color: rgba(255,118,164,0.5); color: #FF76A4; }
   .otp-chip:hover { opacity: 0.85; transform: scale(1.03); }
   .otp-chip svg { flex-shrink: 0; }
 
@@ -316,8 +389,8 @@
     100% { opacity: 1; transform: translateY(0) scale(1); }
   }
   @keyframes newEmailGlow {
-    0%   { box-shadow: 0 0 0 0 rgba(217,249,80,0.5); border-color: var(--accent); }
-    60%  { box-shadow: 0 0 16px 4px rgba(217,249,80,0.25); }
+    0%   { box-shadow: 0 0 0 0 rgba(117,7,135,0.5); border-color: var(--pride-violet); }
+    60%  { box-shadow: 0 0 16px 4px rgba(117,7,135,0.2); }
     100% { box-shadow: none; border-color: var(--border); }
   }
   .email-item.new-email {
@@ -328,15 +401,15 @@
   /* OTP banner inside modal */
   .otp-banner {
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(217,249,80,0.08); border: 1px solid rgba(217,249,80,0.3);
+    background: rgba(255,118,164,0.08); border: 1px solid rgba(255,118,164,0.3);
     border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; gap: 12px;
   }
   .otp-banner-left { display: flex; align-items: center; gap: 10px; }
   .otp-banner-label { font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; }
-  .otp-banner-code { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 800; color: #4a6000; letter-spacing: 0.15em; }
-  [data-theme="dark"] .otp-banner-code { color: var(--accent); }
+  .otp-banner-code { font-family: 'Space Mono', monospace; font-size: 1.6rem; font-weight: 800; color: #4a6000; letter-spacing: 0.15em; }
+  [data-theme="dark"] .otp-banner-code { color: #FF76A4; }
   .otp-copy-btn {
-    background: var(--accent); color: #000; border: none; border-radius: 8px;
+    background: linear-gradient(135deg,#FF8C00,#E40303); color:#fff; border: none; border-radius: 8px;
     padding: 8px 16px; font-size: 0.82rem; font-weight: 700; cursor: pointer;
     transition: all 0.15s; white-space: nowrap; flex-shrink: 0;
   }
@@ -375,7 +448,7 @@
   
   /* Restored default padding for all modals */
   .modal-body { padding: 20px; color: var(--text-main); font-size: 0.9rem; overflow-y: auto; overflow-x: hidden; line-height: 1.6; }
-  .modal-body.is-plain { white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+  .modal-body.is-plain { white-space: pre-wrap; font-family: 'Space Mono', monospace; font-size: 0.85rem; }
   /* Created specific zero-padding class for HTML email iframes */
   .modal-body.is-iframe { padding: 0; }
   .modal-body iframe { display: block; border-radius: 0 0 16px 16px; border: none; width: 100%; background: #fff;}
@@ -398,7 +471,7 @@
     display: flex; align-items: center; gap: 8px; white-space: nowrap;
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-  .toast-icon { color: var(--accent); }
+  .toast-icon { color: var(--pride-violet); }
 
   /* -- FOOTER -- */
   footer { 
@@ -406,7 +479,7 @@
     border-top: 1px dashed var(--border);
   }
   footer p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.8; font-weight: 500;}
-  footer a { color: var(--text-main); text-decoration: none; font-weight: 600; transition: opacity 0.2s;}
+  footer a { color: var(--pride-violet); text-decoration: none; font-weight: 700; transition: opacity 0.2s; font-family: 'Nunito', sans-serif;}
   footer a:hover { opacity: 0.7; }
 
   /* Scrollbars */
@@ -453,12 +526,13 @@
 </head>
 <body>
 
+<div class="pride-bar"></div>
 <div class="wrap">
   <header>
     <div class="logo-wrap">
-      <i data-lucide="zap" class="logo-icon" width="20" height="20"></i>
-      <div class="logo">joven.mail</div>
-      <div class="badge">Beta</div>
+      <i data-lucide="mail" class="logo-icon" width="20" height="20"></i>
+      <div class="logo"><span class="logo-rainbow">7BrosMail</span></div>
+      <div class="badge">✦ Beta</div>
     </div>
     <div class="header-actions">
       <nav class="header-nav">
@@ -490,48 +564,31 @@
   </header>
 
   <main>
+
+    <!-- 1. RECOVER — MAIN FOCUS -->
     <section class="hero">
-      <h1>One Gmail. Infinite Aliases.</h1>
-      <p>Instantly generate temporary dot-variants. Messages route directly to your real inbox, keeping your actual address hidden.</p>
+      <h1>Access Your Inbox</h1>
+      <p>Enter your Gmail alias to load its inbox instantly.</p>
     </section>
 
-    <!-- CONTROL CARD -->
-    <div class="control-card">
-      <div class="card-header">
-        <div class="card-title">
-          <i data-lucide="fingerprint" width="14" height="14"></i> Active Identity
-        </div>
-
-      </div>
-      
-      <div class="alias-field">
-        <div class="alias-text" id="aliasDisplay">generating...</div>
-      </div>
-
-      <div class="actions-grid">
-        <button class="btn-pill btn-primary" onclick="copyAlias()">
-          <i data-lucide="copy" width="16" height="16"></i> Copy address
+    <div class="recover-card">
+      <label class="recover-label">
+        <i data-lucide="mail-search" width="14" height="14"></i> Gmail Alias
+      </label>
+      <div class="recover-row">
+        <input class="input-minimal recover-input" id="recoverInput" type="email" placeholder="your.alias@gmail.com" onkeydown="if(event.key==='Enter')recoverAlias()"/>
+        <button class="btn-pill btn-primary recover-btn" onclick="recoverAlias()">
+          <i data-lucide="arrow-right" width="16" height="16"></i> Load
         </button>
-        <div class="actions-secondary">
-          <button class="btn-pill btn-outline" onclick="newAlias()" title="Generate new">
-            <i data-lucide="refresh-cw" width="16" height="16"></i> New
-          </button>
-          <button class="btn-pill btn-outline" onclick="toggleRecover()" title="Recover past alias">
-            <i data-lucide="history" width="16" height="16"></i> Recover
-          </button>
-        </div>
       </div>
-
-      <div class="recover-box" id="recoverBox">
-        <p style="font-size:0.72rem;color:#888;margin:0 0 8px 0;display:flex;align-items:center;gap:5px;"><i data-lucide="mail-search" width="13" height="13"></i> Enter a previous alias to load its inbox</p>
-        <input class="input-minimal" id="recoverInput" type="email" placeholder="your.previous.alias@gmail.com" onkeydown="if(event.key==='Enter')recoverAlias()"/>
-        <button class="btn-pill btn-primary" style="padding: 10px 20px;" onclick="recoverAlias()">
-          RECOVER
-        </button>
+      <div class="active-alias-row" id="activeAliasRow" style="display:none;">
+        <i data-lucide="check-circle-2" width="12" height="12" style="color:var(--accent);flex-shrink:0;"></i>
+        <span class="active-alias-label">Active:</span>
+        <span class="alias-text" id="aliasDisplay">—</span>
       </div>
     </div>
 
-    <!-- INBOX SECTION -->
+    <!-- 2. INBOX -->
     <div class="inbox-header">
       <div class="inbox-title">
         Inbox <span class="badge-count" id="emailCount">0</span>
@@ -544,22 +601,46 @@
       </div>
     </div>
 
-
     <!-- Empty State -->
     <div class="empty-state bordered" id="emptyState" style="display: none;">
-      <i data-lucide="table-2" class="empty-icon" width="28" height="28"></i>
-      <h3>Oops, nothing here yet!</h3>
-      <p>Once you receive the first email, you'll see all the results here</p>
+      <i data-lucide="inbox" class="empty-icon" width="28" height="28"></i>
+      <h3>Nothing here yet</h3>
+      <p>Load an alias above to see its emails</p>
     </div>
 
     <!-- Loading State -->
     <div class="empty-state" id="loadingState">
       <div class="spinner"></div>
-      <h3 style="margin-top: 8px; font-size: 1rem;">Syncing data...</h3>
+      <h3 style="margin-top: 8px; font-size: 1rem;">Syncing...</h3>
     </div>
 
     <!-- Email List -->
     <div class="email-list" id="emailList" style="display: none;"></div>
+
+    <!-- 3. GENERATE — TUCKED AWAY AT BOTTOM -->
+    <div class="generate-section">
+      <button class="generate-toggle" onclick="toggleGeneratePanel()">
+        <i data-lucide="chevron-down" width="13" height="13" id="generateChevron"></i>
+        Need a new alias?
+      </button>
+      <div class="generate-panel" id="generatePanel" style="display:none;">
+        <div class="generate-alias-row">
+          <span class="alias-text-sm" id="aliasDisplayGen">—</span>
+          <button class="btn-icon-copy" onclick="copyAlias()" title="Copy">
+            <i data-lucide="copy" width="14" height="14"></i>
+          </button>
+        </div>
+        <div class="generate-btns">
+          <button class="btn-pill btn-outline btn-sm-pill" onclick="newAlias()">
+            <i data-lucide="refresh-cw" width="13" height="13"></i> Generate
+          </button>
+          <button class="btn-pill btn-primary btn-sm-pill" onclick="copyAlias()">
+            <i data-lucide="copy" width="13" height="13"></i> Copy
+          </button>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <footer>
@@ -581,7 +662,7 @@
           <strong>From</strong> <span id="modalFrom"></span>
         </div>
         <div class="modal-meta-row">
-          <strong>To</strong> <span id="modalTo" style="font-family: 'JetBrains Mono', monospace;"></span>
+          <strong>To</strong> <span id="modalTo" style="font-family: 'Space Mono', monospace;"></span>
         </div>
         <div class="modal-meta-row">
           <strong>Date</strong> <span id="modalDate"></span>
@@ -689,11 +770,16 @@
   });
 
   function toggleRecover() {
-    const box = document.getElementById('recoverBox');
-    box.classList.toggle('active');
-    if(box.classList.contains('active')) {
-      document.getElementById('recoverInput').focus();
-    }
+    // legacy - not used anymore
+  }
+
+  function toggleGeneratePanel() {
+    const panel = document.getElementById('generatePanel');
+    const btn = document.querySelector('.generate-toggle');
+    const isHidden = panel.style.display === 'none';
+    panel.style.display = isHidden ? 'block' : 'none';
+    if (btn) btn.classList.toggle('open', isHidden);
+    if (isHidden) lucide.createIcons();
   }
 
   /* ── CONFIG ── */
@@ -801,9 +887,13 @@
 
   function setAlias(alias) {
     currentAlias = alias;
-    document.getElementById('aliasDisplay').textContent = alias;
+    var displayEl = document.getElementById('aliasDisplay');
+    if (displayEl) displayEl.textContent = alias;
+    var displayGen = document.getElementById('aliasDisplayGen');
+    if (displayGen) displayGen.textContent = alias;
+    var activeRow = document.getElementById('activeAliasRow');
+    if (activeRow) activeRow.style.display = 'flex';
     localStorage.setItem(STORAGE_KEY, alias);
-    document.getElementById('recoverBox').classList.remove('active');
     subscribeToAlias(alias);
     startSilentRefresh();
     refreshInbox(true);
@@ -1276,7 +1366,8 @@
   /* ── INIT ── */
   window.addEventListener('DOMContentLoaded', function() {
     var saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) setAlias(saved); else newAlias();
+    if (saved) setAlias(saved);
+    // No auto-generate: user must use recover or generate panel
   });
 </script>
 </body>
