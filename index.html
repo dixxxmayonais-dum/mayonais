@@ -21,58 +21,46 @@
 
 <style>
   :root {
-    /* -- PRIDE 8-COLOR PROGRESS FLAG -- */
-    --pride-red:    #E40303;
-    --pride-orange: #FF8C00;
-    --pride-yellow: #FFED00;
-    --pride-green:  #008026;
-    --pride-blue:   #004DFF;
-    --pride-violet: #750787;
-    --pride-white:  #FFFFFF;
-    --pride-black:  #000000;
-    /* Progress additions */
-    --pride-brown:  #613915;
-    --pride-pink:   #FF76A4;
-    --pride-lblue:  #74D7EE;
-
-    /* -- LIGHT MODE -- */
-    --bg-app: #fdf4ff;
+    /* -- LIGHT MODE (bright & clean) -- */
+    --bg-app: #f0f4ff;
     --bg-card: #ffffff;
-    --bg-input: #fdf0ff;
-    --bg-hover: #f3e8ff;
+    --bg-input: #f5f7ff;
+    --bg-hover: #e8edff;
 
-    --border: #e9d5ff;
-    --border-strong: #c084fc;
+    --border: #dde3f5;
+    --border-strong: #a5b4fc;
 
-    --accent: #FF8C00;
-    --accent-hover: #E67A00;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
     --accent-text: #fff;
 
-    --text-main: #1a0033;
-    --text-dim: #7c3aed;
-    --text-muted: #a78bfa;
+    --text-main: #0f172a;
+    --text-dim: #475569;
+    --text-muted: #94a3b8;
 
-    --shadow-card: 0 2px 12px -2px rgba(139,0,255,0.12);
+    --shadow-card: 0 2px 12px -2px rgba(99,102,241,0.10);
+    --unread-bg: #eef2ff;
   }
 
   [data-theme="dark"] {
-    --bg-app: #0d0014;
-    --bg-card: #1a0030;
-    --bg-input: #12001f;
-    --bg-hover: #2d0050;
+    --bg-app: #0f1117;
+    --bg-card: #1a1d2e;
+    --bg-input: #13151f;
+    --bg-hover: #252840;
 
-    --border: #3b006b;
-    --border-strong: #7c00c8;
+    --border: #2d3155;
+    --border-strong: #6366f1;
 
-    --accent: #FF8C00;
-    --accent-hover: #ffaa33;
-    --accent-text: #fff;
+    --accent: #818cf8;
+    --accent-hover: #a5b4fc;
+    --accent-text: #0f172a;
 
-    --text-main: #f9f0ff;
-    --text-dim: #c084fc;
-    --text-muted: #7c3aed;
+    --text-main: #e2e8f0;
+    --text-dim: #94a3b8;
+    --text-muted: #475569;
 
-    --shadow-card: 0 8px 20px -4px rgba(180,0,255,0.3);
+    --shadow-card: 0 8px 20px -4px rgba(99,102,241,0.2);
+    --unread-bg: rgba(99,102,241,0.08);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -105,36 +93,18 @@
   
   main { flex: 1; display: flex; flex-direction: column; padding-bottom: 32px; }
 
-  /* -- PRIDE RAINBOW BAR -- */
-  .pride-bar {
-    height: 5px;
-    background: linear-gradient(90deg,
-      #000000 0%, #000000 12.5%,
-      #613915 12.5%, #613915 25%,
-      #E40303 25%, #E40303 37.5%,
-      #FF8C00 37.5%, #FF8C00 50%,
-      #FFED00 50%, #FFED00 62.5%,
-      #008026 62.5%, #008026 75%,
-      #004DFF 75%, #004DFF 87.5%,
-      #750787 87.5%, #750787 100%
-    );
-    width: 100%;
-    margin: 0;
-    border-radius: 0 0 4px 4px;
-  }
-
   /* -- HEADER -- */
   header { 
     display: flex; align-items: center; justify-content: space-between; 
     padding: 20px 0 14px; 
   }
   .logo-wrap { display: flex; align-items: center; gap: 8px; }
-  .logo { font-size: 1.25rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.01em; font-family: 'Fredoka One', cursive; }
-  .logo-icon { color: var(--pride-violet); }
-  .logo-rainbow { background: linear-gradient(90deg, #E40303, #FF8C00, #FFED00, #008026, #004DFF, #750787); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .logo { font-size: 1.2rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.01em; font-family: 'Fredoka One', cursive; }
+  .logo-icon { color: var(--accent); }
+  .logo-rainbow { color: var(--accent); }
   .badge { 
     font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 6px;
-    background: linear-gradient(90deg, #FF76A4, #74D7EE); color: #1a0033; border: none;
+    background: var(--bg-hover); color: var(--accent); border: 1px solid var(--border-strong);
     font-family: 'Fredoka One', cursive; letter-spacing: 0.05em;
   }
   
@@ -176,37 +146,33 @@
     font-size: 2rem; font-weight: 700; line-height: 1.15; 
     letter-spacing: 0.01em; margin-bottom: 8px; color: var(--text-main);
     font-family: 'Fredoka One', cursive;
-    background: linear-gradient(90deg, #E40303 0%, #FF8C00 20%, #FFED00 38%, #008026 55%, #004DFF 75%, #750787 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
   .hero p { color: var(--text-dim); font-size: 0.9rem; max-width: 340px; margin: 0 auto; line-height: 1.5; }
 
   /* -- RECOVER CARD (main focus) -- */
   .recover-card {
     background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 20px; margin-bottom: 28px;
+    border-radius: 16px; padding: 20px 20px 20px;
+    margin-bottom: 28px;
     box-shadow: var(--shadow-card);
-    border-top: 4px solid transparent;
-    border-image: linear-gradient(90deg, #E40303, #FF8C00, #FFED00, #008026, #004DFF, #750787) 1;
-    border-radius: 16px;
-    position: relative;
-    overflow: hidden;
-  }
-  .recover-card::before {
-    content: "";
-    position: absolute; top: 0; left: 0; right: 0; height: 4px;
-    background: linear-gradient(90deg, #E40303, #FF8C00, #FFED00, #008026, #004DFF, #750787);
-    border-radius: 16px 16px 0 0;
+    border-top: 3px solid var(--accent);
   }
   .recover-label {
     display: flex; align-items: center; gap: 6px;
-    font-size: 0.75rem; font-weight: 800; color: var(--pride-violet);
+    font-size: 0.72rem; font-weight: 800; color: var(--text-muted);
     text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;
     font-family: 'Nunito', sans-serif;
   }
-  .recover-row { display: flex; gap: 8px; }
-  .recover-input { flex: 1; border-radius: 999px; }
-  .recover-btn { flex-shrink: 0; padding: 10px 18px; }
+  .recover-row {
+    display: flex; gap: 8px; width: 100%;
+    align-items: center;
+  }
+  .recover-input {
+    flex: 1 1 0; min-width: 0; border-radius: 999px;
+  }
+  .recover-btn {
+    flex-shrink: 0; padding: 10px 16px; white-space: nowrap;
+  }
   .active-alias-row {
     display: flex; align-items: center; gap: 6px;
     margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border);
@@ -288,6 +254,7 @@
   }
   .input-minimal:focus { border-color: var(--pride-violet); }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  .spin-icon { animation: spin 0.7s linear infinite; }
 
   /* -- INBOX -- */
   .inbox-header { 
@@ -362,11 +329,18 @@
   }
   .email-item:hover { border-color: var(--border-strong); transform: translateY(-1px); }
   
-  .email-dot { width: 8px; height: 8px; border-radius: 50%; background: transparent; }
-  .email-item.unread .email-dot { background: var(--accent); box-shadow: 0 0 6px rgba(117, 7, 135, 0.5); }
+  .email-item.unread { background: var(--unread-bg); border-left: 3px solid var(--accent); }
+  .email-dot { width: 8px; height: 8px; border-radius: 50%; background: transparent; flex-shrink: 0; }
+  .email-item.unread .email-dot { background: var(--accent); animation: pulse-unread 1.8s ease-in-out infinite; }
+  @keyframes pulse-unread {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.6); }
+    50%       { box-shadow: 0 0 0 5px rgba(99,102,241,0); }
+  }
   
   .email-content { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .email-sender { font-weight: 600; font-size: 0.95rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .email-item.unread .email-sender { font-weight: 800; }
+  .email-item.unread .email-subject { color: var(--text-main); font-weight: 600; }
   .email-subject { font-size: 0.85rem; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500;}
   .email-time { font-size: 0.8rem; color: var(--text-dim); font-family: 'Space Mono', monospace; white-space: nowrap;}
 
@@ -471,7 +445,7 @@
     display: flex; align-items: center; gap: 8px; white-space: nowrap;
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-  .toast-icon { color: var(--pride-violet); }
+  .toast-icon { color: var(--accent); }
 
   /* -- FOOTER -- */
   footer { 
@@ -479,7 +453,7 @@
     border-top: 1px dashed var(--border);
   }
   footer p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.8; font-weight: 500;}
-  footer a { color: var(--pride-violet); text-decoration: none; font-weight: 700; transition: opacity 0.2s; font-family: 'Nunito', sans-serif;}
+  footer a { color: var(--accent); text-decoration: none; font-weight: 700; transition: opacity 0.2s; font-family: 'Nunito', sans-serif;}
   footer a:hover { opacity: 0.7; }
 
   /* Scrollbars */
@@ -495,6 +469,9 @@
     .header-divider { display: none; }
     .menu-btn { display: flex; }
     .header-actions { gap: 8px; }
+    .recover-row { flex-wrap: wrap; }
+    .recover-input { min-width: 0; flex: 1 1 120px; }
+    .recover-btn { flex: 0 0 auto; }
     
     /* Mobile Dropdown Styling */
     .mobile-menu {
@@ -526,7 +503,6 @@
 </head>
 <body>
 
-<div class="pride-bar"></div>
 <div class="wrap">
   <header>
     <div class="logo-wrap">
@@ -842,7 +818,8 @@
   }
 
   async function newAlias() {
-    document.getElementById('aliasDisplay').textContent = 'Generating...';
+    var displayGen = document.getElementById('aliasDisplayGen');
+    if (displayGen) displayGen.textContent = 'Generating...';
 
     var usedResult = await sb.from('emails').select('alias');
     var usedSet = new Set();
@@ -881,8 +858,12 @@
     if (!updated.includes(chosen)) { updated.push(chosen); }
     localStorage.setItem('dotmail_used', JSON.stringify(updated));
 
-    setAlias(chosen);
-    showToast('New alias generated');
+    // In generate panel: only update the display, do NOT set as active alias
+    var displayGen = document.getElementById('aliasDisplayGen');
+    if (displayGen) displayGen.textContent = chosen;
+    // Also save to used list so it won't be re-generated
+    showToast('New alias generated — copy it to use');
+    lucide.createIcons();
   }
 
   function setAlias(alias) {
@@ -900,19 +881,44 @@
   }
 
   /* ── RECOVER ── */
-  function recoverAlias() {
+  async function recoverAlias() {
     var input = document.getElementById('recoverInput').value.trim().toLowerCase();
     if (!input) { showToast('Enter an alias to recover'); return; }
     if (!input.includes('@')) input = input + '@' + DOMAIN;
+
+    // Show loading state on button
+    var btn = document.querySelector('.recover-btn');
+    var originalHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<svg class="spin-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
+    btn.style.opacity = '0.8';
+
+    // Small delay for UX feel
+    await new Promise(function(r){ setTimeout(r, 600); });
+
     document.getElementById('recoverInput').value = '';
     setAlias(input);
-    showToast('Alias successfully loaded');
+
+    // Restore button with checkmark briefly
+    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Loaded!';
+    btn.style.opacity = '1';
+    setTimeout(function(){
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+      lucide.createIcons();
+    }, 2000);
+
+    showToast('✓ Inbox loaded successfully');
   }
 
   /* ── COPY ── */
   function copyAlias() {
-    navigator.clipboard.writeText(document.getElementById('aliasDisplay').textContent)
-      .then(function(){ showToast('Copied to clipboard'); });
+    var genEl = document.getElementById('aliasDisplayGen');
+    var text = (genEl && genEl.textContent && genEl.textContent !== '—') 
+      ? genEl.textContent 
+      : (document.getElementById('aliasDisplay') ? document.getElementById('aliasDisplay').textContent : '');
+    if (!text || text === '—' || text === 'Generating...') { showToast('No alias to copy'); return; }
+    navigator.clipboard.writeText(text).then(function(){ showToast('Copied to clipboard'); });
   }
 
   /* ── TOAST ── */
@@ -1365,9 +1371,10 @@
 
   /* ── INIT ── */
   window.addEventListener('DOMContentLoaded', function() {
-    var saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) setAlias(saved);
-    // No auto-generate: user must use recover or generate panel
+    // SECURITY: Do NOT auto-load any saved alias on page load.
+    // Users must explicitly enter their alias each time.
+    // This prevents one user from accessing another user's alias session.
+    lucide.createIcons();
   });
 </script>
 </body>
