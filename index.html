@@ -1380,24 +1380,17 @@
     btn.style.opacity = '0.7';
 
     try {
-      /* ── Server-side validity + rate-limit check ── */
-      var resp = await fetch('/api/check-recovery-email', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ email: input }),
-      });
+      /* ── Query Supabase directly — valid if alias has at least 1 email ── */
+      var result = await sb
+        .from('emails')
+        .select('id', { count: 'exact', head: true })
+        .eq('alias', input);
 
-      var data = await resp.json();
+      if (result.error) throw result.error;
 
-      if (resp.status === 429 || data.blocked) {
-        showToast('⛔ Too many failed attempts. Try again tomorrow.');
-        btn.innerHTML = originalHTML;
-        btn.disabled  = false;
-        btn.style.opacity = '1';
-        return;
-      }
+      var isValid = typeof result.count === 'number' && result.count > 0;
 
-      if (!data.valid) {
+      if (!isValid) {
         showToast('No inbox found for that alias.');
         btn.innerHTML = originalHTML;
         btn.disabled  = false;
@@ -1421,7 +1414,7 @@
 
     } catch (err) {
       console.error('recoverAlias error:', err);
-      showToast('Could not verify alias — check connection');
+      showToast('Could not load alias — check connection');
       btn.innerHTML = originalHTML;
       btn.disabled  = false;
       btn.style.opacity = '1';
