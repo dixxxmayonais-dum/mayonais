@@ -26,6 +26,7 @@
     --bg:             #ffffff;
     --bg-subtle:      #fafafa;
     --bg-hover:       #f5f5f5;
+    --bg-card:        #f9f9f9;
     --border:         #eaeaea;
     --border-strong:  #d4d4d4;
     --text:           #000000;
@@ -35,15 +36,20 @@
     --btn-text:       #ffffff;
     --btn-bg-h:       #111111;
     --accent:         #0070f3;
+    --accent-dark:    #005bcc;
     --accent-bg:      rgba(0,112,243,0.07);
+    --accent-border:  rgba(0,112,243,0.2);
     --unread-bg:      #f0f7ff;
     --shadow:         0 4px 20px rgba(0,0,0,0.06);
+    --notice-bg:      rgba(0,0,0,0.03);
+    --notice-border:  rgba(0,0,0,0.07);
   }
 
   [data-theme="dark"] {
     --bg:             #0a0a0a;
     --bg-subtle:      #111111;
     --bg-hover:       #1a1a1a;
+    --bg-card:        #141414;
     --border:         #2a2a2a;
     --border-strong:  #3a3a3a;
     --text:           #ededed;
@@ -52,10 +58,14 @@
     --btn-bg:         #ffffff;
     --btn-text:       #000000;
     --btn-bg-h:       #e8e8e8;
-    --accent:         #3b9eff;
-    --accent-bg:      rgba(59,158,255,0.08);
-    --unread-bg:      rgba(59,158,255,0.06);
+    --accent:         #00e5c8;
+    --accent-dark:    #00b8a0;
+    --accent-bg:      rgba(0,229,200,0.08);
+    --accent-border:  rgba(0,229,200,0.22);
+    --unread-bg:      rgba(0,229,200,0.06);
     --shadow:         0 4px 20px rgba(0,0,0,0.4);
+    --notice-bg:      rgba(255,255,255,0.04);
+    --notice-border:  rgba(255,255,255,0.08);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -835,6 +845,99 @@
 
   .spin-icon { animation: spin 0.7s linear infinite; }
 
+  /* ── HERO SECTION ── */
+  .hero {
+    padding: 40px 0 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-title {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.035em;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .hero-sub {
+    font-size: 0.9rem;
+    color: var(--text-2);
+    line-height: 1.6;
+    max-width: 400px;
+  }
+  @media (max-width: 480px) {
+    .hero-title { font-size: 1.3rem; }
+  }
+
+  /* ── CARD CONTAINERS ── */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card .section {
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  /* ── CYAN GENERATE BUTTON ── */
+  .btn-generate {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .btn-generate:hover {
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
+  }
+  [data-theme="dark"] .btn-generate { color: #000; }
+
+  /* ── SECURITY NOTICE (soft, friendly) ── */
+  .security-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--notice-bg);
+    border: 1px solid var(--notice-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 14px;
+  }
+  .security-notice svg { flex-shrink: 0; margin-top: 1px; color: var(--text-3); }
+  .security-notice-text { font-size: 0.78rem; color: var(--text-3); line-height: 1.55; }
+  .security-notice-title { font-size: 0.78rem; font-weight: 600; color: var(--text-2); margin-bottom: 2px; }
+
+  /* ── FRIENDLY EMPTY STATE ── */
+  .empty-state-icon {
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg-hover);
+    border-radius: 50%;
+    margin-bottom: 4px;
+  }
+
+  /* ── ACTIVE PILL — update border to use var ── */
+  .active-pill { border-color: var(--accent-border); }
+
+  /* ── OTP CHIP — use cyan ── */
+  [data-theme="dark"] .otp-chip {
+    border-color: rgba(0,229,200,0.25);
+  }
+  [data-theme="dark"] .otp-banner {
+    border-color: rgba(0,229,200,0.2);
+  }
+
+  /* ── LIVE BAR pulse use cyan in dark ── */
+  [data-theme="dark"] .live-bar.active { color: var(--accent); }
+  [data-theme="dark"] .live-bar.active .live-dot { background: var(--accent); }
+
+  /* unread dot pulse in dark uses cyan */
+  [data-theme="dark"] .active-dot { background: var(--accent); }
+  [data-theme="dark"] .email-item.unread .email-dot { background: var(--accent); }
+
   @media (max-width: 480px) {
     .wrap { padding: 0 16px; }
     header { padding: 20px 0; }
@@ -843,6 +946,7 @@
     .gen-row { flex-wrap: wrap; }
     .gen-row .btn { flex: 1 1 auto; }
     .section { padding: 28px 0; }
+    .card { padding: 18px 16px; }
   }
 </style>
 </head>
@@ -890,9 +994,15 @@
     </div>
   </header>
 
+  <section class="hero">
+    <h1 class="hero-title">One Gmail. Endless Uses.</h1>
+    <p class="hero-sub">Instantly create temporary dot-variant aliases that route to your real inbox.</p>
+  </section>
+
   <main>
 
     <!-- ① ALIAS GENERATOR — locked by default, unlocked after PIN -->
+    <div class="card">
     <div id="generateCard" class="section">
 
       <!-- LOCKED STATE: shown until PIN is entered -->
@@ -926,7 +1036,7 @@
         </div>
 
         <div class="gen-row" style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn btn-solid" onclick="newAlias()">
+          <button class="btn btn-generate" onclick="newAlias()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
             Generate New
           </button>
@@ -941,9 +1051,11 @@
         </div>
       </div>
 
-    </div>
+    </div><!-- /.generateCard section -->
+    </div><!-- /.card -->
 
     <!-- ② LOAD ALIAS -->
+    <div class="card">
     <div class="section" id="loadSection">
 
       <!-- Shows when an alias is active -->
@@ -977,11 +1089,20 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Load
           </button>
         </div>
+        <div class="security-notice">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div>
+            <div class="security-notice-title">Just so you know</div>
+            <div class="security-notice-text">To keep things safe, access attempts are recorded (FYI).</div>
+          </div>
+        </div>
       </div>
 
-    </div>
+    </div><!-- /.loadSection section -->
+    </div><!-- /.card -->
 
     <!-- ③ INBOX -->
+    <div class="card">
     <div class="section" id="inboxSection">
       <div class="inbox-hd">
         <div class="inbox-title">
@@ -1002,18 +1123,21 @@
       </div>
 
       <div class="empty-state" id="emptyState" style="display:none;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-3);margin-bottom:4px;"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
-        <h3>No emails yet</h3>
-        <p>Load an alias above to watch for incoming messages</p>
+        <div class="empty-state-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-3);"><path d="M22 17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9.5C2 7 4 5 6.5 5H18c2.2 0 4 1.8 4 4v8Z"/><polyline points="15 9 18 9 18 11"/><path d="M6.5 5C6 3.5 7.5 2 9 2h6c1.5 0 2.5 1 2.5 2.5"/><path d="m2 10 8.5 5.5c.94.61 2.06.61 3 0L22 10"/></svg>
+        </div>
+        <h3>It's quiet here.</h3>
+        <p>Generate or load an alias above to get started.</p>
       </div>
 
-      <div class="loading-state" id="loadingState">
+      <div class="loading-state" id="loadingState" style="display:none;">
         <div class="spinner"></div>
         <span>Syncing…</span>
       </div>
 
       <div class="email-list" id="emailList" style="display:none;"></div>
-    </div>
+    </div><!-- /.inboxSection section -->
+    </div><!-- /.card -->
 
   </main>
 
@@ -1191,6 +1315,7 @@
 
     if (digest === expected) {
       pinUnlocked = true;
+      localStorage.setItem('dotmail_pin_unlocked', JSON.stringify({ ts: Date.now() }));
       closePinModal();
       applyGeneratorLock();
       showToast('Alias generator unlocked');
@@ -1210,6 +1335,7 @@
 
   function lockGenerator() {
     pinUnlocked = false;
+    localStorage.removeItem('dotmail_pin_unlocked');
     applyGeneratorLock();
     showToast('Alias generator locked');
   }
@@ -1709,7 +1835,7 @@
   }
 
   function showLoadingUI() {
-    if (emails.length === 0) {
+    if (emails.length === 0 && currentAlias) {
       document.getElementById('emptyState').style.display    = 'none';
       document.getElementById('emailList').style.display     = 'none';
       document.getElementById('loadingState').style.display  = 'flex';
@@ -1787,8 +1913,40 @@
   /* ── INIT ── */
   window.addEventListener('DOMContentLoaded', function() {
     applyAdminLayout();
-    applyGeneratorLock(); // generator starts locked; shows "Access Alias Generator" button
-    safeIcons();          // no-op if lucide cdn didn't load — never crashes
+
+    // ── Restore PIN unlock state (valid for 24 hours)
+    try {
+      var pinData = JSON.parse(localStorage.getItem('dotmail_pin_unlocked') || 'null');
+      if (pinData && pinData.ts && (Date.now() - pinData.ts < 86400000)) {
+        pinUnlocked = true;
+      }
+    } catch(e) {}
+
+    applyGeneratorLock();
+
+    // ── Restore saved alias
+    var savedAlias = localStorage.getItem(STORAGE_KEY);
+    if (savedAlias && savedAlias !== '—' && savedAlias.includes('@')) {
+      // Populate display fields immediately (no network needed for UI restore)
+      var displayEl = document.getElementById('aliasDisplay');
+      if (displayEl) displayEl.textContent = savedAlias;
+      var activeRow = document.getElementById('activeAliasRow');
+      if (activeRow) activeRow.style.display = 'flex';
+      var displayGen = document.getElementById('aliasDisplayGen');
+      if (displayGen) displayGen.textContent = savedAlias;
+
+      // Set alias and fetch inbox
+      currentAlias = savedAlias;
+      subscribeToAlias(savedAlias);
+      startSilentRefresh();
+      refreshInbox(true);
+    } else {
+      // No alias — show friendly empty state, not spinner
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('emptyState').style.display   = 'flex';
+    }
+
+    safeIcons();
   });
   function openLoginModal() {
     var o = document.getElementById('loginModalOverlay');
