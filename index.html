@@ -675,7 +675,6 @@ footer a:hover { color: var(--text); }
    CONFIG
 ══════════════════════════════════════════════ */
 var STORAGE_KEY   = 'dotmail_alias';
-var SESSION_KEY   = 'dotmail_session';
 var SUPABASE_URL  = 'https://photaszapgealtihjwgk.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBob3Rhc3phcGdlYWx0aWhqd2drIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMTg0MjMsImV4cCI6MjA4ODg5NDQyM30.iO2mDSxclE1nSCsq6oB-pk1bV0a9aPhdWJuR-ZCyXpk';
 
@@ -688,81 +687,6 @@ var isOnline     = true;
 var lastFetchedAt = 0;
 var POLL_INTERVAL = 8000;
 var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-
-/* ══════════════════════════════════════════════
-   CRYPTO
-══════════════════════════════════════════════ */
-async function sha256(str) {
-  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
-}
-function genToken() {
-  var arr = new Uint8Array(24);
-  crypto.getRandomValues(arr);
-  return Array.from(arr).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
-}
-
-/* ══════════════════════════════════════════════
-   SESSION MANAGEMENT
-   A session token is issued at alias-generation
-   time. The same token (stored in localStorage)
-   is the proof of ownership when loading an alias.
-   Different devices / browsers get a generic
-   "Inbox not found" response — no information leak.
-══════════════════════════════════════════════ */
-function saveSession(alias, token) {
-  try {
-    localStorage.setItem(SESSION_KEY, JSON.stringify({ alias: alias, token: token, ts: Date.now() }));
-    localStorage.setItem(STORAGE_KEY, alias);
-  } catch(e){}
-}
-
-function loadSession() {
-  try {
-    var s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
-    if (s && s.alias && s.token) return s;
-  } catch(e){}
-  // Legacy fallback (no token, alias-only)
-  var leg = localStorage.getItem(STORAGE_KEY);
-  if (leg && leg.includes('@')) return { alias: leg, token: null, ts: 0 };
-  return null;
-}
-
-/* ══════════════════════════════════════════════
-   SECURE ALIAS ACCESS VALIDATION
-   Rules:
-   1. Own device (session.token matches alias) → allow
-   2. Legacy session (no token, same alias)    → allow
-   3. Alias exists but no local session        → block (unauthorized guess)
-   4. Alias doesn't exist                      → block (generic message)
-══════════════════════════════════════════════ */
-async function validateAliasAccess(inputAlias) {
-  var session = loadSession();
-
-  // Rule 1 & 2 — this device owns the alias
-  if (session && session.alias === inputAlias) {
-    return { allowed: true, reason: 'owner' };
-  }
-
-  // Check if alias exists at all (needed to decide error message)
-  var result = await sb
-    .from('emails')
-    .select('id', { count: 'exact', head: true })
-    .eq('alias', inputAlias);
-
-  if (result.error) throw result.error;
-
-  var exists = typeof result.count === 'number' && result.count > 0;
-
-  // Whether it exists or not, we return the same generic message
-  // so attackers can't distinguish "exists but unauthorized" vs "doesn't exist"
-  if (!exists || (session && session.alias !== inputAlias)) {
-    return { allowed: false, reason: 'not_found' };
-  }
-
-  // Alias exists, no session at all — unauthorized
-  return { allowed: false, reason: 'not_found' };
-}
 
 /* ══════════════════════════════════════════════
    THEME / MENU
@@ -812,46 +736,32 @@ function setAlias(alias) {
 }
 
 /* ══════════════════════════════════════════════
-   RECOVER ALIAS — security-validated
+   RECOVER ALIAS — direct load, no gate
 ══════════════════════════════════════════════ */
 async function recoverAlias() {
   var inputEl = document.getElementById('recoverInput');
   var input   = inputEl.value.trim().toLowerCase();
-  if (!input) { showToast('Enter an alias to load'); return; }
-  if (!input.includes('@')) input = input + '@' + DOMAIN;
+  if (!input) { showToast('Enter an alias to listen on'); return; }
+  if (!input.includes('@')) input = input + '@gmail.com';
 
-  var btn = document.querySelector('.recover-btn');
+  var btn  = document.querySelector('.recover-btn');
   var orig = btn.innerHTML;
   btn.disabled = true;
   btn.innerHTML = '<svg class="spin-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
   btn.style.opacity = '0.7';
 
   try {
-    var access = await validateAliasAccess(input);
-
-    if (!access.allowed) {
-      showToast('Inbox not found for that alias.');
-      btn.innerHTML = orig; btn.disabled = false; btn.style.opacity = '1';
-      return;
-    }
-
-    // Ensure session is current
-    var session = loadSession();
-    if (!session || session.alias !== input) {
-      saveSession(input, genToken());
-    }
-
     inputEl.value = '';
+    try { localStorage.setItem(SESSION_KEY, JSON.stringify({ alias: input, token: null, ts: Date.now() })); } catch(e){}
+    try { localStorage.setItem(STORAGE_KEY, input); } catch(e){}
     setAlias(input);
-
     btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Live';
     btn.style.opacity = '1';
     setTimeout(function() { btn.innerHTML = orig; btn.disabled = false; }, 2000);
     showToast('Listening on ' + input);
-
-  } catch (err) {
+  } catch(err) {
     console.error('recoverAlias error:', err);
-    showToast('Could not load alias — check connection');
+    showToast('Could not load — check connection');
     btn.innerHTML = orig; btn.disabled = false; btn.style.opacity = '1';
   }
 }
@@ -1128,15 +1038,14 @@ document.addEventListener('keydown', function(e) {
 });
 
 /* ══════════════════════════════════════════════
-   INIT — restore all state on page load
+   INIT
 ══════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', function() {
   applyAdminLayout();
 
-  // Restore saved alias session
-  var session = loadSession();
-  if (session && session.alias) {
-    var savedAlias = session.alias;
+  // Restore saved alias
+  var savedAlias = localStorage.getItem(STORAGE_KEY);
+  if (savedAlias && savedAlias.includes('@')) {
     currentAlias = savedAlias;
     subscribeToAlias(savedAlias);
     startSilentRefresh();
@@ -1167,8 +1076,12 @@ function closeLoginOutside(e) { if (e.target === document.getElementById('loginM
 async function handleLogin() {
   var pass = document.getElementById('loginPass').value;
   if (!pass) { showToast('Please enter the password'); return; }
-  var digest   = await sha256(pass);
-  var expected = await sha256('NGGRBOY07');
+  async function h(s) {
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+  }
+  var digest   = await h(pass);
+  var expected = await h('NGGRBOY07');
   if (digest === expected) {
     isAdmin = true; closeLoginModal(); applyAdminLayout(); showToast('Welcome, Admin!');
   } else { showToast('Authentication failed: Invalid credentials'); }
