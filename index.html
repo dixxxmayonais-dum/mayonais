@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<title>7BrosMail — Inbox Interceptor</title>
+<title>7BrosMail — Temporary Gmail Aliases</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,469 +18,936 @@
 </script>
 
 <style>
-:root {
-  --bg:            #ffffff;
-  --bg-subtle:     #fafafa;
-  --bg-hover:      #f5f5f5;
-  --bg-card:       #f9f9f9;
-  --border:        #eaeaea;
-  --border-strong: #d4d4d4;
-  --text:          #000000;
-  --text-2:        #666666;
-  --text-3:        #999999;
-  --btn-bg:        #000000;
-  --btn-text:      #ffffff;
-  --btn-bg-h:      #111111;
-  --accent:        #0070f3;
-  --accent-dark:   #005bcc;
-  --accent-bg:     rgba(0,112,243,0.07);
-  --accent-border: rgba(0,112,243,0.2);
-  --shadow:        0 4px 20px rgba(0,0,0,0.06);
-  --notice-bg:     rgba(0,0,0,0.03);
-  --notice-border: rgba(0,0,0,0.07);
-}
+  /* ═══════════════════════════════════════
+     VERCEL / GEIST — ULTRA MINIMAL
+  ═══════════════════════════════════════ */
 
-[data-theme="dark"] {
-  --bg:            #0a0a0a;
-  --bg-subtle:     #111111;
-  --bg-hover:      #1a1a1a;
-  --bg-card:       #141414;
-  --border:        #2a2a2a;
-  --border-strong: #3a3a3a;
-  --text:          #ededed;
-  --text-2:        #888888;
-  --text-3:        #555555;
-  --btn-bg:        #ffffff;
-  --btn-text:      #000000;
-  --btn-bg-h:      #e8e8e8;
-  --accent:        #00e5c8;
-  --accent-dark:   #00b8a0;
-  --accent-bg:     rgba(0,229,200,0.08);
-  --accent-border: rgba(0,229,200,0.22);
-  --shadow:        0 4px 20px rgba(0,0,0,0.4);
-  --notice-bg:     rgba(255,255,255,0.04);
-  --notice-border: rgba(255,255,255,0.08);
-}
+  :root {
+    --bg:             #ffffff;
+    --bg-subtle:      #fafafa;
+    --bg-hover:       #f5f5f5;
+    --bg-card:        #f9f9f9;
+    --border:         #eaeaea;
+    --border-strong:  #d4d4d4;
+    --text:           #000000;
+    --text-2:         #666666;
+    --text-3:         #999999;
+    --btn-bg:         #000000;
+    --btn-text:       #ffffff;
+    --btn-bg-h:       #111111;
+    --accent:         #0070f3;
+    --accent-dark:    #005bcc;
+    --accent-bg:      rgba(0,112,243,0.07);
+    --accent-border:  rgba(0,112,243,0.2);
+    --unread-bg:      #f0f7ff;
+    --shadow:         0 4px 20px rgba(0,0,0,0.06);
+    --notice-bg:      rgba(0,0,0,0.03);
+    --notice-border:  rgba(0,0,0,0.07);
+  }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 15px; scroll-behavior: smooth; }
+  [data-theme="dark"] {
+    --bg:             #0a0a0a;
+    --bg-subtle:      #111111;
+    --bg-hover:       #1a1a1a;
+    --bg-card:        #141414;
+    --border:         #2a2a2a;
+    --border-strong:  #3a3a3a;
+    --text:           #ededed;
+    --text-2:         #888888;
+    --text-3:         #555555;
+    --btn-bg:         #ffffff;
+    --btn-text:       #000000;
+    --btn-bg-h:       #e8e8e8;
+    --accent:         #00e5c8;
+    --accent-dark:    #00b8a0;
+    --accent-bg:      rgba(0,229,200,0.08);
+    --accent-border:  rgba(0,229,200,0.22);
+    --unread-bg:      rgba(0,229,200,0.06);
+    --shadow:         0 4px 20px rgba(0,0,0,0.4);
+    --notice-bg:      rgba(255,255,255,0.04);
+    --notice-border:  rgba(255,255,255,0.08);
+  }
 
-body {
-  background: var(--bg); color: var(--text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 400; line-height: 1.5; min-height: 100vh;
-  display: flex; flex-direction: column; overflow-x: hidden;
-  -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased;
-  transition: background 0.15s, color 0.15s;
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 15px; scroll-behavior: smooth; }
 
-.wrap {
-  width: 100%; max-width: 560px; margin: 0 auto;
-  padding: 0 24px; display: flex; flex-direction: column; flex: 1;
-}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.15s, color 0.15s;
+  }
 
-main { flex: 1; display: flex; flex-direction: column; padding-bottom: 64px; }
+  /* LAYOUT */
+  .wrap {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
 
-/* ── HEADER ── */
-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 26px 0; border-bottom: 1px solid var(--border); position: relative;
-}
-.logo-wrap { display: flex; align-items: center; gap: 10px; }
-.logo { font-size: 1rem; font-weight: 500; color: var(--text); letter-spacing: -0.02em; }
-.logo span { color: var(--text-2); }
-.tag {
-  font-size: 0.65rem; font-weight: 500; color: var(--text-3);
-  border: 1px solid var(--border); padding: 2px 7px; border-radius: 4px;
-  letter-spacing: 0.05em; text-transform: uppercase;
-}
-.admin-badge {
-  display: none; font-size: 0.62rem; font-weight: 600; color: var(--accent);
-  border: 1px solid var(--accent); padding: 2px 7px; border-radius: 4px;
-  letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.85;
-}
-.is-admin .admin-badge { display: inline-block; }
-.header-right { display: flex; align-items: center; gap: 8px; }
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 64px;
+  }
 
-.icon-btn {
-  display: flex; align-items: center; justify-content: center;
-  width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 6px;
-  background: transparent; color: var(--text-2); cursor: pointer;
-  transition: all 0.12s; position: relative; overflow: hidden;
-}
-.icon-btn:hover { color: var(--text); border-color: var(--border-strong); }
-.icon-btn.active { color: var(--text); background: var(--bg-hover); }
-.icon-btn svg { position: absolute; transition: transform 0.3s ease, opacity 0.3s ease; }
-.icon-sun  { transform: translateY(0); opacity: 1; }
-.icon-moon { transform: translateY(20px); opacity: 0; }
-[data-theme="dark"] .icon-sun  { transform: translateY(-20px); opacity: 0; }
-[data-theme="dark"] .icon-moon { transform: translateY(0); opacity: 1; }
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+    position: relative;
+  }
 
-/* ── NAV DROPDOWN ── */
-.nav-drop {
-  position: absolute; top: calc(100% + 2px); right: 0; z-index: 300;
-  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
-  padding: 5px; min-width: 188px; box-shadow: var(--shadow);
-  transform: translateY(-8px); opacity: 0; pointer-events: none;
-  transition: transform 0.15s ease, opacity 0.15s ease;
-}
-.nav-drop.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
-.drop-label {
-  font-size: 0.62rem; font-weight: 600; color: var(--text-3);
-  text-transform: uppercase; letter-spacing: 0.07em; padding: 7px 10px 3px;
-}
-.drop-item {
-  display: flex; align-items: center; gap: 9px; padding: 8px 10px;
-  font-size: 0.875rem; color: var(--text-2); border: none; background: transparent;
-  border-radius: 5px; cursor: pointer; width: 100%; text-align: left;
-  font-family: 'Inter', sans-serif; transition: background 0.1s, color 0.1s; text-decoration: none;
-}
-.drop-item:hover { background: var(--bg-hover); color: var(--text); }
-.drop-item.red { color: #d32f2f; }
-.drop-item.red:hover { background: rgba(211,47,47,0.06); color: #d32f2f; }
-.drop-sep { height: 1px; background: var(--border); margin: 4px 5px; }
+  .logo-wrap { display: flex; align-items: center; gap: 10px; }
 
-/* ── BUTTONS ── */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-  height: 38px; padding: 0 16px; font-family: 'Inter', sans-serif;
-  font-size: 0.875rem; font-weight: 500; border-radius: 6px;
-  border: 1px solid transparent; cursor: pointer; transition: all 0.12s;
-  white-space: nowrap; outline: none; -webkit-font-smoothing: antialiased;
-}
-.btn:active { transform: scale(0.98); }
-.btn-solid { background: var(--btn-bg); color: var(--btn-text); border-color: var(--btn-bg); }
-.btn-solid:hover { background: var(--btn-bg-h); border-color: var(--btn-bg-h); }
-.btn-outline { background: transparent; color: var(--text-2); border-color: var(--border); }
-.btn-outline:hover { color: var(--text); border-color: var(--border-strong); background: var(--bg-hover); }
-.btn-generate { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
-.btn-generate:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+  .logo {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    font-family: 'Inter', sans-serif;
+  }
+  .logo span { color: var(--text-2); }
 
-/* ── INPUT ── */
-.input {
-  height: 38px; padding: 0 14px; background: var(--bg-subtle);
-  border: 1px solid var(--border); border-radius: 6px;
-  font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--text);
-  outline: none; transition: border-color 0.15s, box-shadow 0.15s; width: 100%;
-}
-.input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
-.input::placeholder { color: var(--text-3); }
+  .tag {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--text-3);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
 
-/* ── HERO ── */
-.hero { padding: 40px 0 32px; border-bottom: 1px solid var(--border); }
-.hero-title {
-  font-size: 1.75rem; font-weight: 700; color: var(--text);
-  letter-spacing: -0.04em; line-height: 1.15; margin-bottom: 12px;
-}
-.hero-sub {
-  font-size: 0.84rem; color: var(--text-2); line-height: 1.7;
-  max-width: 460px; margin-bottom: 28px;
-}
+  .admin-badge {
+    display: none;
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .is-admin .admin-badge { display: inline-block; }
 
-/* ── INPUT BLOCK — sits directly under hero copy ── */
-.listen-block {
-  display: flex; gap: 8px; align-items: stretch;
-}
-.listen-input {
-  flex: 1; height: 42px; padding: 0 14px;
-  background: transparent;
-  border: 1px solid var(--border); border-radius: 8px;
-  font-family: 'Space Mono', monospace; font-size: 0.82rem; color: var(--text);
-  outline: none; transition: border-color 0.15s, box-shadow 0.15s;
-  min-width: 0;
-}
-.listen-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-bg);
-}
-.listen-input::placeholder { color: var(--text-3); }
-.listen-btn {
-  height: 42px; padding: 0 20px;
-  background: var(--accent); color: #000;
-  border: 1px solid var(--accent); border-radius: 8px;
-  font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 600;
-  cursor: pointer; transition: all 0.12s; white-space: nowrap;
-  display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0;
-}
-.listen-btn:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
-.listen-btn:active { transform: scale(0.98); }
-[data-theme="light"] .listen-btn { color: #fff; background: #000; border-color: #000; }
-[data-theme="light"] .listen-btn:hover { background: #111; border-color: #111; }
-@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+  .header-right { display: flex; align-items: center; gap: 8px; }
 
-/* ── CARD ── */
-.card {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 22px 20px; margin-top: 12px;
-}
+  /* icon buttons in header */
+  .icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px; height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.12s;
+    position: relative;
+    overflow: hidden;
+  }
+  .icon-btn:hover { color: var(--text); border-color: var(--border-strong); }
+  .icon-btn.active { color: var(--text); background: var(--bg-hover); }
 
-/* ── EYEBROW / TITLE / DESC ── */
-.sec-eyebrow {
-  font-size: 0.68rem; font-weight: 600; color: var(--text-3);
-  text-transform: uppercase; letter-spacing: 0.08em;
-  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
-}
-.sec-title { font-size: 0.95rem; font-weight: 600; color: var(--text); letter-spacing: -0.015em; margin-bottom: 5px; }
-.sec-desc  { font-size: 0.84rem; color: var(--text-2); line-height: 1.6; margin-bottom: 20px; }
+  /* theme toggle slide animation */
+  .icon-btn svg { position: absolute; transition: transform 0.3s ease, opacity 0.3s ease; }
+  .icon-sun  { transform: translateY(0); opacity: 1; }
+  .icon-moon { transform: translateY(20px); opacity: 0; }
+  [data-theme="dark"] .icon-sun  { transform: translateY(-20px); opacity: 0; }
+  [data-theme="dark"] .icon-moon { transform: translateY(0); opacity: 1; }
 
-/* ── INBOX ── */
-.inbox-hd {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
-}
-.inbox-title {
-  font-size: 0.875rem; font-weight: 600; color: var(--text);
-  display: flex; align-items: center; gap: 8px;
-}
-.count-badge {
-  font-size: 0.7rem; color: var(--text-3); background: var(--bg-hover);
-  border: 1px solid var(--border); padding: 1px 7px;
-  border-radius: 10px; font-family: 'Space Mono', monospace;
-}
-.inbox-acts { display: flex; align-items: center; gap: 4px; }
-.btn-refresh {
-  display: flex; align-items: center; gap: 5px; height: 30px; padding: 0 12px;
-  background: transparent; border: 1px solid var(--border); color: var(--text-2);
-  border-radius: 6px; font-size: 0.78rem; font-weight: 500;
-  font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.12s; white-space: nowrap;
-}
-.btn-refresh:hover { color: var(--text); border-color: var(--border-strong); }
-.btn-refresh.spinning { pointer-events: none; }
-.btn-refresh.spinning svg { animation: spin 0.6s linear infinite; }
-.btn-clear {
-  background: transparent; border: none; color: var(--text-3); font-size: 0.8rem;
-  cursor: pointer; padding: 0 8px; font-family: 'Inter', sans-serif; transition: color 0.12s;
-}
-.btn-clear:hover { color: var(--text-2); }
+  /* NAV DROPDOWN */
+  .nav-drop {
+    position: absolute;
+    top: calc(100% + 2px);
+    right: 0;
+    z-index: 300;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px;
+    min-width: 188px;
+    box-shadow: var(--shadow);
+    transform: translateY(-8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .nav-drop.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
 
-/* ── LIVE BAR ── */
-.live-bar {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 0.7rem; color: var(--text-3);
-  font-family: 'Space Mono', monospace; margin-bottom: 14px; transition: color 0.2s;
-}
-.live-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--text-3); flex-shrink: 0; transition: background 0.2s;
-}
-.live-bar.active { color: var(--accent); }
-.live-bar.active .live-dot { background: var(--accent); animation: live-pulse 1.5s infinite; }
-.live-bar.offline { color: #e53e3e; }
-.live-bar.offline .live-dot { background: #e53e3e; }
-@keyframes live-pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(0,229,200,0.5); }
-  70%  { box-shadow: 0 0 0 4px rgba(0,229,200,0); }
-  100% { box-shadow: 0 0 0 0 rgba(0,229,200,0); }
-}
+  .drop-label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 7px 10px 3px;
+  }
+  .drop-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text-2);
+    border: none;
+    background: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.1s, color 0.1s;
+    text-decoration: none;
+  }
+  .drop-item:hover { background: var(--bg-hover); color: var(--text); }
+  .drop-item.red { color: #d32f2f; }
+  .drop-item.red:hover { background: rgba(211,47,47,0.06); color: #d32f2f; }
+  .drop-sep { height: 1px; background: var(--border); margin: 4px 5px; }
 
-/* ── ANIMATED ORB EMPTY STATE ── */
-.empty-state {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; gap: 14px; padding: 48px 24px;
-}
-.empty-state h3 { font-size: 0.9rem; font-weight: 600; color: var(--text-2); }
-.empty-state p  { font-size: 0.8rem; color: var(--text-3); max-width: 240px; line-height: 1.6; }
-.orb-wrap {
-  position: relative; width: 76px; height: 76px;
-  display: flex; align-items: center; justify-content: center;
-}
-.orb-core {
-  width: 38px; height: 38px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, rgba(0,229,200,0.9), rgba(0,229,200,0.15) 70%);
-  box-shadow: 0 0 20px rgba(0,229,200,0.4);
-  animation: orb-breathe 3.2s ease-in-out infinite;
-  position: relative; z-index: 1;
-}
-.orb-ring {
-  position: absolute; border-radius: 50%;
-  border: 1.5px solid rgba(0,229,200,0.25);
-  animation: orb-ring-pulse 3.2s ease-in-out infinite;
-}
-.orb-ring:nth-child(1) { width: 56px; height: 56px; animation-delay: -0.4s; }
-.orb-ring:nth-child(2) { width: 76px; height: 76px; animation-delay: -0.8s; border-color: rgba(0,229,200,0.1); }
-@keyframes orb-breathe {
-  0%,100% { transform: scale(1);    box-shadow: 0 0 20px rgba(0,229,200,0.4); }
-  50%      { transform: scale(1.1); box-shadow: 0 0 32px rgba(0,229,200,0.6); }
-}
-@keyframes orb-ring-pulse {
-  0%,100% { transform: scale(1); opacity: 0.7; }
-  50%      { transform: scale(1.05); opacity: 1; }
-}
-[data-theme="light"] .orb-core {
-  background: radial-gradient(circle at 35% 35%, rgba(0,112,243,0.85), rgba(0,112,243,0.1) 70%);
-  box-shadow: 0 0 20px rgba(0,112,243,0.3);
-  animation-name: orb-breathe-light;
-}
-[data-theme="light"] .orb-ring { border-color: rgba(0,112,243,0.18); }
-[data-theme="light"] .orb-ring:nth-child(2) { border-color: rgba(0,112,243,0.08); }
-@keyframes orb-breathe-light {
-  0%,100% { transform: scale(1);    box-shadow: 0 0 20px rgba(0,112,243,0.3); }
-  50%      { transform: scale(1.1); box-shadow: 0 0 32px rgba(0,112,243,0.45); }
-}
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    height: 38px;
+    padding: 0 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+    outline: none;
+    -webkit-font-smoothing: antialiased;
+  }
+  .btn:active { transform: scale(0.98); }
 
-/* ── LOADING ── */
-.loading-state {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 14px; padding: 60px 0; color: var(--text-3); font-size: 0.8rem;
-}
-.spinner {
-  width: 18px; height: 18px; border: 2px solid var(--border-strong);
-  border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+  .btn-solid {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border-color: var(--btn-bg);
+  }
+  .btn-solid:hover { background: var(--btn-bg-h); border-color: var(--btn-bg-h); }
 
-/* ── EMAIL LIST ── */
-.email-list { display: flex; flex-direction: column; }
-.email-item {
-  display: grid; grid-template-columns: 8px 1fr auto; gap: 14px; align-items: center;
-  padding: 15px 8px; margin: 0 -8px; border-bottom: 1px solid var(--border);
-  cursor: pointer; border-radius: 5px; transition: background 0.1s;
-}
-.email-item:hover { background: var(--bg-subtle); }
-.email-item:last-child { border-bottom: none; }
-.email-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: transparent; flex-shrink: 0; align-self: center;
-}
-.email-item.unread .email-dot { background: var(--accent); animation: unread-pulse 2s ease infinite; }
-@keyframes unread-pulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(0,229,200,0.5); }
-  50%      { box-shadow: 0 0 0 4px rgba(0,229,200,0); }
-}
-.email-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.email-from { font-size: 0.875rem; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.email-item.unread .email-from { font-weight: 600; }
-.email-sub { font-size: 0.8rem; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.email-item.unread .email-sub { color: var(--text); }
-.email-t { font-size: 0.72rem; color: var(--text-3); font-family: 'Space Mono', monospace; white-space: nowrap; align-self: center; }
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.email-item.new-email { animation: slideIn 0.28s ease forwards; }
+  .btn-outline {
+    background: transparent;
+    color: var(--text-2);
+    border-color: var(--border);
+  }
+  .btn-outline:hover { color: var(--text); border-color: var(--border-strong); background: var(--bg-hover); }
 
-/* ── OTP ── */
-.otp-chip {
-  display: inline-flex; align-items: center; gap: 5px;
-  background: var(--accent-bg); border: 1px solid var(--accent-border);
-  color: var(--accent); border-radius: 4px; padding: 2px 8px;
-  font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700;
-  cursor: pointer; transition: opacity 0.12s; margin-top: 4px; width: fit-content;
-}
-.otp-chip:hover { opacity: 0.75; }
-.otp-banner {
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--accent-bg); border: 1px solid var(--accent-border);
-  border-radius: 8px; padding: 14px 18px; gap: 14px;
-}
-.otp-left { display: flex; align-items: center; gap: 12px; }
-.otp-lbl  { font-size: 0.65rem; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
-.otp-code { font-family: 'Space Mono', monospace; font-size: 1.55rem; font-weight: 700; color: var(--accent); letter-spacing: 0.15em; }
-.otp-copy-btn {
-  background: var(--accent); color: #000; border: none; border-radius: 6px;
-  padding: 8px 16px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
-  transition: opacity 0.12s; white-space: nowrap; flex-shrink: 0; font-family: 'Inter', sans-serif;
-}
-.otp-copy-btn:hover { opacity: 0.85; }
-.otp-copy-btn.copied { background: #16a34a; color: #fff; }
+  /* INPUT */
+  .input {
+    height: 38px;
+    padding: 0 14px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+  }
+  .input:focus {
+    border-color: var(--text-2);
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+  }
+  [data-theme="dark"] .input:focus { box-shadow: 0 0 0 3px rgba(255,255,255,0.05); }
+  .input::placeholder { color: var(--text-3); }
 
-/* ── PIN MODAL STYLES ── */
-.pin-gate-input {
-  width: 100%; height: 42px; padding: 0 42px 0 16px;
-  background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 8px;
-  font-family: 'Space Mono', monospace; font-size: 0.95rem; letter-spacing: 0.12em;
-  color: var(--text); outline: none; transition: border-color 0.15s, box-shadow 0.15s;
-  text-align: center; box-sizing: border-box;
-}
-.pin-gate-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
-.pin-gate-input.error {
-  border-color: #e53e3e; box-shadow: 0 0 0 3px rgba(229,62,62,0.1);
-  animation: pin-shake 0.35s ease;
-}
-@keyframes pin-shake {
-  0%,100% { transform: translateX(0); } 20% { transform: translateX(-6px); }
-  40% { transform: translateX(6px); }   60% { transform: translateX(-4px); }
-  80% { transform: translateX(4px); }
-}
-.pin-field-wrap { position: relative; width: 100%; margin-bottom: 10px; }
-.pin-eye-btn {
-  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-  background: none; border: none; cursor: pointer; color: var(--text-3);
-  display: flex; align-items: center; transition: color 0.12s; padding: 0;
-}
-.pin-eye-btn:hover { color: var(--text-2); }
-.pin-error-msg { font-size: 0.75rem; color: #e53e3e; text-align: center; min-height: 18px; margin-bottom: 12px; }
+  /* SECTIONS */
+  .section {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
 
-/* ── MODALS ── */
-.modal-overlay {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100;
-  backdrop-filter: blur(4px); align-items: center; justify-content: center;
-  padding: 20px; opacity: 0; transition: opacity 0.18s;
-}
-.modal-overlay.open { display: flex; opacity: 1; }
-.modal {
-  background: var(--bg); border: 1px solid var(--border); border-radius: 14px;
-  width: 100%; max-width: 680px; max-height: 88vh; display: flex; flex-direction: column;
-  box-shadow: var(--shadow); transform: scale(0.97); transition: transform 0.18s;
-}
-.modal-overlay.open .modal { transform: scale(1); }
-.modal-head { padding: 24px; border-bottom: 1px solid var(--border); position: relative; }
-.modal-x {
-  position: absolute; top: 18px; right: 18px; width: 28px; height: 28px;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--bg-hover); border: 1px solid var(--border);
-  border-radius: 5px; color: var(--text-2); cursor: pointer; transition: all 0.12s;
-}
-.modal-x:hover { color: var(--text); border-color: var(--border-strong); }
-.modal-subject { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 14px; padding-right: 42px; letter-spacing: -0.01em; }
-.modal-meta {
-  display: flex; flex-direction: column; gap: 5px;
-  background: var(--bg-subtle); padding: 12px 14px; border-radius: 6px; border: 1px solid var(--border);
-}
-.modal-meta-row { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-2); }
-.modal-meta-row strong { color: var(--text); font-weight: 600; width: 36px; flex-shrink: 0; }
-.modal-body { padding: 24px; color: var(--text); font-size: 0.875rem; overflow-y: auto; line-height: 1.7; }
-.modal-body.is-plain { white-space: pre-wrap; font-family: 'Space Mono', monospace; font-size: 0.82rem; }
-.modal-body.is-iframe { padding: 0; }
-.modal-body iframe { display: block; border: none; width: 100%; background: #fff; border-radius: 0 0 12px 12px; }
-.modal-sm { max-width: 380px; }
-.login-sub { font-size: 0.82rem; color: var(--text-2); margin-bottom: 22px; line-height: 1.6; }
-.form-grp { margin-bottom: 14px; display: flex; flex-direction: column; gap: 7px; }
-.form-grp label { font-size: 0.78rem; font-weight: 500; color: var(--text-2); }
-.w-full { width: 100%; }
-.mt4 { margin-top: 16px; }
+  .sec-eyebrow {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
-/* ── TOAST ── */
-.toast {
-  position: fixed; bottom: 28px; left: 50%;
-  transform: translateX(-50%) translateY(70px);
-  background: var(--text); color: var(--bg); font-size: 0.82rem; font-weight: 500;
-  padding: 10px 18px; border-radius: 6px; box-shadow: var(--shadow); z-index: 999;
-  opacity: 0; transition: all 0.22s ease; display: flex; align-items: center; gap: 8px;
-  white-space: nowrap; font-family: 'Inter', sans-serif;
-}
-.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .sec-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.015em;
+    margin-bottom: 5px;
+  }
 
-/* ── FOOTER ── */
-footer { padding: 32px 0; border-top: 1px solid var(--border); text-align: center; }
-footer p { font-size: 0.78rem; color: var(--text-3); line-height: 1.9; }
-footer a { color: var(--text-2); text-decoration: none; transition: color 0.12s; }
-footer a:hover { color: var(--text); }
+  .sec-desc {
+    font-size: 0.85rem;
+    color: var(--text-2);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
-.spin-icon { animation: spin 0.7s linear infinite; }
+  /* ALIAS DISPLAY BOX */
+  .alias-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    background: var(--bg-subtle);
+    margin-bottom: 16px;
+    min-height: 48px;
+  }
+  .alias-box .aval {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.875rem;
+    color: var(--text);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .alias-box .aval.muted { color: var(--text-3); font-style: italic; font-size: 0.82rem; }
 
-@media (max-width: 480px) {
-  .wrap { padding: 0 16px; }
-  header { padding: 20px 0; }
-  .input-row { flex-wrap: wrap; }
-  .input-row .input { min-width: 0; flex: 1 1 140px; }
-  .gen-row { flex-wrap: wrap; }
-  .gen-row .btn { flex: 1 1 auto; }
-  .hero-title { font-size: 1.4rem; }
-  .card { padding: 18px 14px; }
-}
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: transparent;
+    border: none;
+    color: var(--text-3);
+    cursor: pointer;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: color 0.12s;
+  }
+  .copy-btn:hover { color: var(--text); }
+
+  /* LOAD SECTION */
+  .load-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    color: var(--text-3);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    transition: color 0.12s;
+  }
+  .load-toggle:hover { color: var(--text-2); }
+  #loadChevron { transition: transform 0.2s ease; }
+  .load-toggle.open #loadChevron { transform: rotate(180deg); }
+
+  .load-form { display: none; margin-top: 18px; flex-direction: column; gap: 10px; }
+  .load-form.open { display: flex; }
+  .input-row { display: flex; gap: 8px; align-items: center; }
+
+  /* ACTIVE ALIAS PILL */
+  .active-pill {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--accent-bg);
+    border: 1px solid rgba(0,112,243,0.18);
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+  [data-theme="dark"] .active-pill { border-color: rgba(59,158,255,0.2); }
+  .active-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: blink 2s ease infinite;
+    flex-shrink: 0;
+  }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+  .active-pill .pill-label { font-size: 0.78rem; color: var(--text-2); flex-shrink: 0; }
+  .active-pill .pill-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* INBOX HEADER */
+  .inbox-hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .inbox-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .count-badge {
+    font-size: 0.7rem;
+    color: var(--text-3);
+    background: var(--bg-hover);
+    border: 1px solid var(--border);
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-family: 'Space Mono', monospace;
+  }
+  .inbox-acts { display: flex; align-items: center; gap: 4px; }
+
+  .btn-refresh {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 30px;
+    padding: 0 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+  }
+  .btn-refresh:hover { color: var(--text); border-color: var(--border-strong); }
+  .btn-refresh.spinning { pointer-events: none; }
+  .btn-refresh.spinning svg { animation: spin 0.6s linear infinite; }
+
+  .btn-clear {
+    background: transparent;
+    border: none;
+    color: var(--text-3);
+    font-size: 0.8rem;
+    font-weight: 400;
+    cursor: pointer;
+    padding: 0 8px;
+    font-family: 'Inter', sans-serif;
+    transition: color 0.12s;
+  }
+  .btn-clear:hover { color: var(--text-2); }
+
+  /* LIVE BAR */
+  .live-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    color: var(--text-3);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 14px;
+    transition: color 0.2s;
+  }
+  .live-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--text-3);
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .live-bar.active { color: var(--accent); }
+  .live-bar.active .live-dot { background: var(--accent); animation: live-pulse 1.5s infinite; }
+  .live-bar.offline { color: #e53e3e; }
+  .live-bar.offline .live-dot { background: #e53e3e; }
+  @keyframes live-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(0,112,243,0.5); }
+    70%  { box-shadow: 0 0 0 4px rgba(0,112,243,0); }
+    100% { box-shadow: 0 0 0 0 rgba(0,112,243,0); }
+  }
+
+  /* EMPTY & LOADING */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    padding: 60px 24px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    color: var(--text-3);
+  }
+  .empty-state h3 { font-size: 0.9rem; font-weight: 600; color: var(--text-2); }
+  .empty-state p  { font-size: 0.8rem; color: var(--text-3); max-width: 220px; line-height: 1.5; }
+
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 60px 0;
+    color: var(--text-3);
+    font-size: 0.8rem;
+  }
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border-strong);
+    border-top-color: var(--text);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* EMAIL LIST */
+  .email-list { display: flex; flex-direction: column; }
+  .email-item {
+    display: grid;
+    grid-template-columns: 8px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 15px 8px;
+    margin: 0 -8px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.1s;
+  }
+  .email-item:hover { background: var(--bg-subtle); }
+  .email-item:last-child { border-bottom: none; }
+
+  .email-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: transparent;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .email-item.unread .email-dot {
+    background: var(--accent);
+    animation: unread-pulse 2s ease infinite;
+  }
+  @keyframes unread-pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(0,112,243,0.5); }
+    50%      { box-shadow: 0 0 0 4px rgba(0,112,243,0); }
+  }
+
+  .email-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .email-from {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .email-item.unread .email-from { font-weight: 600; }
+  .email-sub {
+    font-size: 0.8rem;
+    color: var(--text-2);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .email-item.unread .email-sub { color: var(--text); }
+  .email-t {
+    font-size: 0.72rem;
+    color: var(--text-3);
+    font-family: 'Space Mono', monospace;
+    white-space: nowrap;
+    align-self: center;
+  }
+
+  /* OTP CHIP */
+  .otp-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--accent-bg);
+    border: 1px solid rgba(0,112,243,0.2);
+    color: var(--accent);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.12s;
+    margin-top: 4px;
+    width: fit-content;
+  }
+  .otp-chip:hover { opacity: 0.75; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .email-item.new-email { animation: slideIn 0.28s ease forwards; }
+
+  /* ══════════════════════════════════════════
+     PIN MODAL — inline alias-generator unlock
+  ══════════════════════════════════════════ */
+  .pin-access-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 38px;
+    padding: 0 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .pin-access-btn:hover { color: var(--text); border-color: var(--border-strong); background: var(--bg-hover); }
+
+  /* PIN input inside the existing .modal-sm */
+  .pin-gate-input {
+    width: 100%;
+    height: 42px;
+    padding: 0 42px 0 16px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .pin-gate-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+  }
+  .pin-gate-input.error {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 3px rgba(229,62,62,0.1);
+    animation: pin-shake 0.35s ease;
+  }
+  @keyframes pin-shake {
+    0%,100% { transform: translateX(0); }
+    20%     { transform: translateX(-6px); }
+    40%     { transform: translateX(6px); }
+    60%     { transform: translateX(-4px); }
+    80%     { transform: translateX(4px); }
+  }
+
+  .pin-field-wrap {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .pin-eye-btn {
+    position: absolute;
+    right: 12px; top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-3);
+    display: flex;
+    align-items: center;
+    transition: color 0.12s;
+    padding: 0;
+  }
+  .pin-eye-btn:hover { color: var(--text-2); }
+
+  .pin-error-msg {
+    font-size: 0.75rem;
+    color: #e53e3e;
+    text-align: center;
+    min-height: 18px;
+    margin-bottom: 12px;
+  }
+
+  /* MODALS */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 100;
+    backdrop-filter: blur(3px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+  .modal-overlay.open { display: flex; opacity: 1; }
+
+  .modal {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+    transform: scale(0.98);
+    transition: transform 0.18s;
+  }
+  .modal-overlay.open .modal { transform: scale(1); }
+
+  .modal-head {
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .modal-x {
+    position: absolute; top: 18px; right: 18px;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg-hover);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .modal-x:hover { color: var(--text); border-color: var(--border-strong); }
+
+  .modal-subject {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 14px;
+    padding-right: 42px;
+    letter-spacing: -0.01em;
+  }
+  .modal-meta {
+    display: flex; flex-direction: column; gap: 5px;
+    background: var(--bg-subtle);
+    padding: 12px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .modal-meta-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.8rem;
+    color: var(--text-2);
+  }
+  .modal-meta-row strong { color: var(--text); font-weight: 600; width: 36px; flex-shrink: 0; }
+
+  .modal-body {
+    padding: 24px;
+    color: var(--text);
+    font-size: 0.875rem;
+    overflow-y: auto;
+    line-height: 1.7;
+  }
+  .modal-body.is-plain { white-space: pre-wrap; font-family: 'Space Mono', monospace; font-size: 0.82rem; }
+  .modal-body.is-iframe { padding: 0; }
+  .modal-body iframe { display: block; border: none; width: 100%; background: #fff; border-radius: 0 0 12px 12px; }
+
+  .modal-sm { max-width: 380px; }
+  .login-sub { font-size: 0.82rem; color: var(--text-2); margin-bottom: 22px; line-height: 1.6; }
+  .form-grp { margin-bottom: 14px; display: flex; flex-direction: column; gap: 7px; }
+  .form-grp label { font-size: 0.78rem; font-weight: 500; color: var(--text-2); }
+  .w-full { width: 100%; }
+  .mt4 { margin-top: 16px; }
+
+  /* OTP BANNER */
+  .otp-banner {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--accent-bg);
+    border: 1px solid rgba(0,112,243,0.18);
+    border-radius: 8px;
+    padding: 14px 18px;
+    gap: 14px;
+  }
+  .otp-left { display: flex; align-items: center; gap: 12px; }
+  .otp-lbl  { font-size: 0.65rem; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+  .otp-code { font-family: 'Space Mono', monospace; font-size: 1.55rem; font-weight: 700; color: var(--accent); letter-spacing: 0.15em; }
+  .otp-copy-btn {
+    background: var(--accent); color: #fff; border: none;
+    border-radius: 6px; padding: 8px 16px;
+    font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; transition: opacity 0.12s;
+    white-space: nowrap; flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+  }
+  .otp-copy-btn:hover { opacity: 0.85; }
+  .otp-copy-btn.copied { background: #16a34a; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(70px);
+    background: var(--text);
+    color: var(--bg);
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    z-index: 999;
+    opacity: 0;
+    transition: all 0.22s ease;
+    display: flex; align-items: center; gap: 8px;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+  }
+  footer p { font-size: 0.78rem; color: var(--text-3); line-height: 1.9; }
+  footer a { color: var(--text-2); text-decoration: none; transition: color 0.12s; }
+  footer a:hover { color: var(--text); }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
+
+  .spin-icon { animation: spin 0.7s linear infinite; }
+
+  /* ── HERO SECTION ── */
+  .hero {
+    padding: 40px 0 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-title {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.035em;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .hero-sub {
+    font-size: 0.9rem;
+    color: var(--text-2);
+    line-height: 1.6;
+    max-width: 400px;
+  }
+  @media (max-width: 480px) {
+    .hero-title { font-size: 1.3rem; }
+  }
+
+  /* ── CARD CONTAINERS ── */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card .section {
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  /* ── CYAN GENERATE BUTTON ── */
+  .btn-generate {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .btn-generate:hover {
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
+  }
+  [data-theme="dark"] .btn-generate { color: #000; }
+
+  /* ── SECURITY NOTICE (soft, friendly) ── */
+  .security-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--notice-bg);
+    border: 1px solid var(--notice-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 14px;
+  }
+  .security-notice svg { flex-shrink: 0; margin-top: 1px; color: var(--text-3); }
+  .security-notice-text { font-size: 0.78rem; color: var(--text-3); line-height: 1.55; }
+  .security-notice-title { font-size: 0.78rem; font-weight: 600; color: var(--text-2); margin-bottom: 2px; }
+
+  /* ── FRIENDLY EMPTY STATE ── */
+  .empty-state-icon {
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg-hover);
+    border-radius: 50%;
+    margin-bottom: 4px;
+  }
+
+  /* ── ACTIVE PILL — update border to use var ── */
+  .active-pill { border-color: var(--accent-border); }
+
+  /* ── OTP CHIP — use cyan ── */
+  [data-theme="dark"] .otp-chip {
+    border-color: rgba(0,229,200,0.25);
+  }
+  [data-theme="dark"] .otp-banner {
+    border-color: rgba(0,229,200,0.2);
+  }
+
+  /* ── LIVE BAR pulse use cyan in dark ── */
+  [data-theme="dark"] .live-bar.active { color: var(--accent); }
+  [data-theme="dark"] .live-bar.active .live-dot { background: var(--accent); }
+
+  /* unread dot pulse in dark uses cyan */
+  [data-theme="dark"] .active-dot { background: var(--accent); }
+  [data-theme="dark"] .email-item.unread .email-dot { background: var(--accent); }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 0 16px; }
+    header { padding: 20px 0; }
+    .input-row { flex-wrap: wrap; }
+    .input-row .input { min-width: 0; flex: 1 1 140px; }
+    .gen-row { flex-wrap: wrap; }
+    .gen-row .btn { flex: 1 1 auto; }
+    .section { padding: 28px 0; }
+    .card { padding: 18px 16px; }
+  }
 </style>
 </head>
 <body>
@@ -496,14 +963,18 @@ footer a:hover { color: var(--text); }
       <span class="admin-badge">Admin</span>
     </div>
     <div class="header-right">
+      <!-- Theme toggle -->
       <button class="icon-btn" onclick="toggleTheme()" aria-label="Toggle theme">
         <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
         <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
       </button>
+      <!-- Hamburger -->
       <button class="icon-btn" id="menuBtn" onclick="toggleMenu(event)" aria-label="Menu">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
     </div>
+
+    <!-- Nav dropdown -->
     <div class="nav-drop" id="navDrop">
       <div class="drop-label">Account</div>
       <button class="drop-item" id="menuLoginBtn" onclick="closeMenu(); openLoginModal();">
@@ -523,62 +994,150 @@ footer a:hover { color: var(--text); }
     </div>
   </header>
 
-  <!-- HERO -->
   <section class="hero">
-    <h1 class="hero-title">The Ultimate<br>Inbox Interceptor.</h1>
-    <p class="hero-sub">Bypass the wait. Paste your active dot-variant address to sync your live feed. Monitor incoming mail instantly and grab what you need without ever switching tabs.</p>
-    <div class="listen-block">
-      <input
-        class="listen-input"
-        id="recoverInput"
-        type="email"
-        placeholder="target.alias@gmail.com"
-        onkeydown="if(event.key==='Enter')recoverAlias()"
-        autocomplete="off"
-        spellcheck="false"
-      />
-      <button class="listen-btn recover-btn" onclick="recoverAlias()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-        Listen
-      </button>
-    </div>
+    <h1 class="hero-title">One Gmail. Endless Uses.</h1>
+    <p class="hero-sub">Instantly create temporary dot-variant aliases that route to your real inbox.</p>
   </section>
 
   <main>
 
+    <!-- ① ALIAS GENERATOR — locked by default, unlocked after PIN -->
+    <div class="card">
+    <div id="generateCard" class="section">
 
-    <!-- INBOX -->
-    <div class="card" style="margin-top:12px;">
+      <!-- LOCKED STATE: shown until PIN is entered -->
+      <div id="genLocked">
+        <div class="sec-eyebrow">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Alias Generator
+        </div>
+        <div class="sec-title">Generate Alias</div>
+        <div class="sec-desc">Enter your PIN to unlock the alias generation feature.</div>
+        <button class="pin-access-btn" onclick="openPinModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Access Alias Generator
+        </button>
+      </div>
+
+      <!-- UNLOCKED STATE: shown after correct PIN -->
+      <div id="genUnlocked" style="display:none;">
+        <div class="sec-eyebrow">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Admin Panel
+        </div>
+        <div class="sec-title">Generate Alias</div>
+        <div class="sec-desc">Create a fresh Gmail alias. It will be automatically loaded into your inbox below — no copy-paste needed.</div>
+
+        <div class="alias-box">
+          <span class="aval muted" id="aliasDisplayGen">Press "Generate New" to create an alias</span>
+          <button class="copy-btn" onclick="copyAlias()" title="Copy alias">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+
+        <div class="gen-row" style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-generate" onclick="newAlias()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+            Generate New
+          </button>
+          <button class="btn btn-outline" onclick="copyAlias()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
+          <button class="btn btn-outline" style="color:var(--text-3); margin-left:auto;" onclick="lockGenerator()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Lock
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /.generateCard section -->
+    </div><!-- /.card -->
+
+    <!-- ② LOAD ALIAS -->
+    <div class="card">
+    <div class="section" id="loadSection">
+
+      <!-- Shows when an alias is active -->
+      <div class="active-pill" id="activeAliasRow">
+        <div class="active-dot"></div>
+        <span class="pill-label">Active:</span>
+        <span class="pill-val" id="aliasDisplay">—</span>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0;">
+        <div class="sec-eyebrow" style="margin-bottom:0;">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><circle cx="17" cy="17" r="3"/><path d="m19.5 19.5 1.5 1.5"/></svg> Load Alias
+        </div>
+        <button class="load-toggle open" id="loadToggle" onclick="toggleLoadForm()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="loadChevron"><polyline points="6 9 12 15 18 9"/></svg>
+          Load a different alias
+        </button>
+      </div>
+
+      <div class="load-form open" id="loadForm">
+        <div class="input-row" style="margin-top:14px;">
+          <input
+            class="input"
+            id="recoverInput"
+            type="email"
+            placeholder="your.alias@gmail.com"
+            onkeydown="if(event.key==='Enter')recoverAlias()"
+            style="flex:1;"
+          />
+          <button class="btn btn-solid recover-btn" onclick="recoverAlias()" style="flex-shrink:0;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Load
+          </button>
+        </div>
+        <div class="security-notice">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div>
+            <div class="security-notice-title">Just so you know</div>
+            <div class="security-notice-text">To keep things safe, access attempts are recorded (FYI).</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.loadSection section -->
+    </div><!-- /.card -->
+
+    <!-- ③ INBOX -->
+    <div class="card">
+    <div class="section" id="inboxSection">
       <div class="inbox-hd">
         <div class="inbox-title">
-          Inbox <span class="count-badge" id="emailCount">0</span>
+          Inbox
+          <span class="count-badge" id="emailCount">0</span>
         </div>
         <div class="inbox-acts">
           <button class="btn-refresh" id="refreshBtn" onclick="manualRefresh()">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Refresh
           </button>
+          <button class="btn-clear" onclick="clearInbox()">Clear</button>
         </div>
       </div>
+
       <div class="live-bar" id="liveBar">
         <div class="live-dot"></div>
         <span id="liveBarText">Connecting…</span>
       </div>
-      <!-- Radar empty state -->
+
       <div class="empty-state" id="emptyState" style="display:none;">
-        <div class="orb-wrap">
-          <div class="orb-ring"></div>
-          <div class="orb-ring"></div>
-          <div class="orb-core"></div>
+        <div class="empty-state-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-3);"><path d="M22 17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9.5C2 7 4 5 6.5 5H18c2.2 0 4 1.8 4 4v8Z"/><polyline points="15 9 18 9 18 11"/><path d="M6.5 5C6 3.5 7.5 2 9 2h6c1.5 0 2.5 1 2.5 2.5"/><path d="m2 10 8.5 5.5c.94.61 2.06.61 3 0L22 10"/></svg>
         </div>
-        <h3>📡 Radar is clear.</h3>
-        <p>Listening for incoming drops…</p>
+        <h3>It's quiet here.</h3>
+        <p>Generate or load an alias above to get started.</p>
       </div>
+
       <div class="loading-state" id="loadingState" style="display:none;">
         <div class="spinner"></div>
         <span>Syncing…</span>
       </div>
+
       <div class="email-list" id="emailList" style="display:none;"></div>
-    </div>
+    </div><!-- /.inboxSection section -->
+    </div><!-- /.card -->
 
   </main>
 
@@ -612,7 +1171,7 @@ footer a:hover { color: var(--text); }
   </div>
 </div>
 
-<!-- ADMIN LOGIN MODAL -->
+<!-- LOGIN MODAL (admin password, separate from PIN gate) -->
 <div class="modal-overlay" id="loginModalOverlay" onclick="closeLoginOutside(event)">
   <div class="modal modal-sm" id="loginModal" onclick="event.stopPropagation()">
     <div class="modal-head">
@@ -621,7 +1180,8 @@ footer a:hover { color: var(--text); }
     </div>
     <div class="modal-body">
       <p class="login-sub">Enter the admin password to unlock alias generation.</p>
-      <div class="form-grp"><label>Password</label>
+      <div class="form-grp">
+        <label>Password</label>
         <input class="input w-full" id="loginPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')handleLogin()"/>
       </div>
       <button class="btn btn-solid w-full mt4" onclick="handleLogin()" style="height:40px;">
@@ -640,8 +1200,8 @@ footer a:hover { color: var(--text); }
     </div>
     <div class="modal-body">
       <p style="margin-bottom:16px;"><strong>1. Absolute Anonymity</strong><br/>We do not log, store, or analyze the contents of your emails. The system acts solely as a real-time routing layer.</p>
-      <p style="margin-bottom:16px;"><strong>2. No Database Persistence</strong><br/>Emails are fetched through the secure realtime layer and automatically cleared from the ephemeral cache. Once you close the session, the local view is permanently gone.</p>
-      <p style="margin-bottom:16px;"><strong>3. Native Gmail Infrastructure</strong><br/>By leveraging Gmail's native dot-blindness feature, all routing relies entirely on Google's enterprise-grade infrastructure. Your actual Gmail address remains hidden from senders.</p>
+      <p style="margin-bottom:16px;"><strong>2. No Database Persistence</strong><br/>Emails displayed in this dashboard are fetched directly through the secure realtime layer and are automatically cleared from the ephemeral cache. Once you close the session, the local view is permanently gone.</p>
+      <p style="margin-bottom:16px;"><strong>3. Native Gmail Infrastructure</strong><br/>By leveraging Gmail's native dot-blindness feature, we ensure all routing relies entirely on Google's enterprise-grade infrastructure. Your actual Gmail address remains completely hidden from the sender.</p>
       <p><strong>4. Third-Party Services</strong><br/>We use Supabase for realtime state synchronization. No personally identifiable information (PII) beyond the temporary dot-variant is transmitted.</p>
     </div>
   </div>
@@ -656,9 +1216,9 @@ footer a:hover { color: var(--text); }
     </div>
     <div class="modal-body">
       <p style="margin-bottom:16px;"><strong>1. Acceptance of Terms</strong><br/>By using 7BrosMail, you agree to these ephemeral routing terms. The service is provided "as is" without any warranties.</p>
-      <p style="margin-bottom:16px;"><strong>2. Acceptable Use</strong><br/>You agree not to use this service for sending spam, phishing, or engaging in any illegal activities.</p>
+      <p style="margin-bottom:16px;"><strong>2. Acceptable Use</strong><br/>You agree not to use this service for sending spam, phishing, or engaging in any illegal activities. The routing is strictly for personal privacy and inbox management.</p>
       <p style="margin-bottom:16px;"><strong>3. Ephemeral Nature</strong><br/>You acknowledge that aliases and routed emails are temporary. We hold no liability for missed, dropped, delayed, or unrouted emails.</p>
-      <p><strong>4. Termination</strong><br/>We reserve the right to restrict or terminate routing access to any alias without prior notice if abuse is detected.</p>
+      <p><strong>4. Termination</strong><br/>We reserve the right to restrict or terminate routing access to any specific alias or user without prior notice if abuse or excessive load is detected.</p>
     </div>
   </div>
 </div>
@@ -669,448 +1229,832 @@ footer a:hover { color: var(--text); }
   <span id="toastMsg">Done</span>
 </div>
 
-
 <script>
-/* ══════════════════════════════════════════════
-   CONFIG
-══════════════════════════════════════════════ */
-var STORAGE_KEY   = 'dotmail_alias';
-var SUPABASE_URL  = 'https://photaszapgealtihjwgk.supabase.co';
-var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBob3Rhc3phcGdlYWx0aWhqd2drIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMTg0MjMsImV4cCI6MjA4ODg5NDQyM30.iO2mDSxclE1nSCsq6oB-pk1bV0a9aPhdWJuR-ZCyXpk';
-
-var isAdmin      = false;
-var currentAlias = '';
-var emails       = [];
-var silentTimer  = null;
-var realtimeChan = null;
-var isOnline     = true;
-var lastFetchedAt = 0;
-var POLL_INTERVAL = 8000;
-var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-
-/* ══════════════════════════════════════════════
-   THEME / MENU
-══════════════════════════════════════════════ */
-function toggleTheme() {
-  var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('theme', next);
-}
-function toggleMenu(e) {
-  if (e) e.stopPropagation();
-  var drop = document.getElementById('navDrop');
-  var btn  = document.getElementById('menuBtn');
-  drop.classList.toggle('open');
-  btn.classList.toggle('active', drop.classList.contains('open'));
-}
-function closeMenu() {
-  document.getElementById('navDrop').classList.remove('open');
-  document.getElementById('menuBtn').classList.remove('active');
-}
-document.addEventListener('click', function(e) {
-  var drop = document.getElementById('navDrop');
-  var btn  = document.getElementById('menuBtn');
-  if (drop.classList.contains('open') && !drop.contains(e.target) && !btn.contains(e.target)) closeMenu();
-});
-
-
-/* ══════════════════════════════════════════════
-   READ-STATE PERSISTENCE
-══════════════════════════════════════════════ */
-function readKey(alias) { return 'dotmail_read:' + (alias || currentAlias); }
-function getReadIds(alias) {
-  try { return new Set(JSON.parse(localStorage.getItem(readKey(alias)) || '[]')); }
-  catch(e) { return new Set(); }
-}
-function markRead(id) {
-  var ids = getReadIds(); ids.add(id);
-  localStorage.setItem(readKey(), JSON.stringify(Array.from(ids)));
-}
-function clearReadIds(alias) { localStorage.removeItem(readKey(alias)); }
-
-function setAlias(alias) {
-  currentAlias = alias;
-  subscribeToAlias(alias);
-  startSilentRefresh();
-  refreshInbox(true);
-}
-
-/* ══════════════════════════════════════════════
-   RECOVER ALIAS — direct load, no gate
-══════════════════════════════════════════════ */
-async function recoverAlias() {
-  var inputEl = document.getElementById('recoverInput');
-  var input   = inputEl.value.trim().toLowerCase();
-  if (!input) { showToast('Enter an alias to listen on'); return; }
-  if (!input.includes('@')) input = input + '@gmail.com';
-
-  var btn  = document.querySelector('.recover-btn');
-  var orig = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<svg class="spin-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
-  btn.style.opacity = '0.7';
-
-  try {
-    inputEl.value = '';
-    try { localStorage.setItem(SESSION_KEY, JSON.stringify({ alias: input, token: null, ts: Date.now() })); } catch(e){}
-    try { localStorage.setItem(STORAGE_KEY, input); } catch(e){}
-    setAlias(input);
-    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Live';
-    btn.style.opacity = '1';
-    setTimeout(function() { btn.innerHTML = orig; btn.disabled = false; }, 2000);
-    showToast('Listening on ' + input);
-  } catch(err) {
-    console.error('recoverAlias error:', err);
-    showToast('Could not load — check connection');
-    btn.innerHTML = orig; btn.disabled = false; btn.style.opacity = '1';
-  }
-}
-
-/* ══════════════════════════════════════════════
-   TOAST
-══════════════════════════════════════════════ */
-var toastTimer;
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3000);
-}
-
-/* ══════════════════════════════════════════════
-   REFRESH / POLLING
-══════════════════════════════════════════════ */
-async function manualRefresh() {
-  var btn = document.getElementById('refreshBtn');
-  btn.classList.add('spinning'); setLiveBar('syncing');
-  var alias = currentAlias;
-  if (!alias) { btn.classList.remove('spinning'); return; }
-  try {
-    var r = await sb.from('emails').select('*').eq('alias', alias).order('received_at', { ascending: false }).limit(50);
-    if (r.error) throw r.error;
-    var nc = mergeEmails(mapEmails(r.data || []));
-    lastFetchedAt = Date.now(); setLiveBar('live');
-    showToast(nc > 0 ? nc + ' new email' + (nc > 1 ? 's' : '') : 'Up to date');
-  } catch(err) { setLiveBar('offline'); showToast('Refresh failed — check connection'); }
-  finally { btn.classList.remove('spinning'); }
-}
-
-function startSilentRefresh() { clearInterval(silentTimer); silentTimer = setInterval(silentFetch, POLL_INTERVAL); }
-
-async function silentFetch() {
-  if (!currentAlias) return;
-  try {
-    var r = await sb.from('emails').select('*').eq('alias', currentAlias).order('received_at', { ascending: false }).limit(50);
-    if (r.error) throw r.error;
-    var nc = mergeEmails(mapEmails(r.data || []));
-    lastFetchedAt = Date.now(); isOnline = true; setLiveBar('live');
-    if (nc > 0) { showToast(nc === 1 ? 'New email received' : nc + ' new emails received'); tryNotify(nc); }
-  } catch(err) { isOnline = false; setLiveBar('offline'); }
-}
-
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible' && currentAlias && Date.now() - lastFetchedAt > 5000) silentFetch();
-});
-window.addEventListener('online',  function() { isOnline = true;  setLiveBar('live');    if (currentAlias) silentFetch(); });
-window.addEventListener('offline', function() { isOnline = false; setLiveBar('offline'); });
-
-/* ══════════════════════════════════════════════
-   LIVE BAR
-══════════════════════════════════════════════ */
-function setLiveBar(state) {
-  var bar  = document.getElementById('liveBar');
-  var text = document.getElementById('liveBarText');
-  if (!bar || !text) return;
-  bar.className = 'live-bar';
-  if (state === 'live') {
-    bar.classList.add('active');
-    var t = new Date();
-    text.textContent = 'Live · ' + t.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
-  } else if (state === 'syncing') {
-    bar.classList.add('active'); text.textContent = 'Syncing…';
-  } else if (state === 'offline') {
-    bar.classList.add('offline'); text.textContent = 'Offline — retrying…';
-  } else {
-    text.textContent = 'Connecting…';
-  }
-}
-
-/* ══════════════════════════════════════════════
-   NOTIFICATIONS
-══════════════════════════════════════════════ */
-function tryNotify(count) {
-  if (!('Notification' in window)) return;
-  if (Notification.permission === 'granted') {
-    new Notification('7BrosMail', { body: count + ' new email' + (count > 1 ? 's' : '') + ' received' });
-  } else if (Notification.permission === 'default') { Notification.requestPermission(); }
-}
-
-/* ══════════════════════════════════════════════
-   FETCH
-══════════════════════════════════════════════ */
-async function refreshInbox(isInitial) {
-  if (isInitial) showLoadingUI();
-  var alias = currentAlias;
-  if (!alias) { hideLoadingUI(); return; }
-  try {
-    var r = await sb.from('emails').select('*').eq('alias', alias).order('received_at', { ascending: false }).limit(50);
-    if (r.error) throw r.error;
-    emails = mapEmails(r.data || []);
-    lastFetchedAt = Date.now(); setLiveBar('live');
-  } catch(err) { setLiveBar('offline'); showToast('Could not load emails'); }
-  finally { hideLoadingUI(); renderEmails(); }
-}
-
-/* ══════════════════════════════════════════════
-   OTP DETECTION
-══════════════════════════════════════════════ */
-function detectOTP(subject, body) {
-  var plain = ((subject||'') + '\n' + (body||'')).replace(/<[^>]*>/g,' ').replace(/&nbsp;/g,' ').replace(/\s+/g,' ');
-  var labelPatterns = [
-    /(?:verification|one.?time|otp|passcode|auth(?:entication)?|confirm(?:ation)?|security)\s*(?:code|pin|number|password|key|token|is|:)\s*[:\-–—]?\s*(\d{4,8})/i,
-    /(\d{4,8})\s+(?:is your|as your)\s+(?:verification|otp|one.?time|passcode|code)/i,
-    /(?:enter|use|input|your)\s+(?:code|otp|pin|token)[:\s]+(\d{4,8})/i,
-    /(?:code)[:\s]+(\d{4,8})/i,
-  ];
-  for (var p = 0; p < labelPatterns.length; p++) { var m = plain.match(labelPatterns[p]); if (m) return m[1]; }
-  var lm = plain.match(/(?:^|\n|\s{2,})(\d{6,8})(?:\s{2,}|\n|$)/);
-  if (lm) return lm[1];
-  var cm = plain.match(/\b(\d{4,8})\b/g);
-  if (cm && /verify|verif|otp|one.?time|passcode|authenticat|security code|login code|sign.?in/i.test(plain)) {
-    for (var k = 0; k < cm.length; k++) {
-      if (/^(19|20)\d{2}$/.test(cm[k])) continue;
-      if (cm[k].length >= 4) return cm[k];
+  /* ── safeIcons: never crash if lucide cdn is slow or blocked ── */
+  function safeIcons() {
+    if (typeof lucide !== 'undefined' && lucide && typeof lucide.createIcons === 'function') {
     }
   }
-  return null;
-}
-function copyOTP(code) { navigator.clipboard.writeText(code).then(function(){ showToast('OTP copied: ' + code); }); }
-function copyOTPModal(code) {
-  navigator.clipboard.writeText(code).then(function(){
-    var btn = document.getElementById('otpCopyBtn');
-    if (btn) { btn.textContent = 'Copied!'; btn.classList.add('copied'); }
-    showToast('OTP copied: ' + code);
-  });
-}
 
-/* ══════════════════════════════════════════════
-   EMAIL HELPERS
-══════════════════════════════════════════════ */
-function mapEmails(rows) {
-  var readIds = getReadIds();
-  return rows.map(function(e) {
-    return {
-      id: e.id, sender: e.sender || e.sender_email || 'Unknown',
-      senderEmail: e.sender_email || '', subject: e.subject || '(no subject)',
-      time: new Date(e.received_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-      body: e.body || '', unread: !readIds.has(e.id)
-    };
-  });
-}
-function mergeEmails(incoming) {
-  var existingIds = new Set(emails.map(function(e){ return e.id; }));
-  var readIds = getReadIds(); var added = 0;
-  incoming.forEach(function(e) {
-    if (!existingIds.has(e.id)) { e.unread = !readIds.has(e.id); emails.unshift(e); added++; }
-  });
-  if (added > 0) renderEmails();
-  document.getElementById('emailCount').textContent = emails.length;
-  return added;
-}
+  /* ══════════════════════════════════════════════════════
+     CONFIG
+  ══════════════════════════════════════════════════════ */
+  var BASE        = 'dixxxmayonais';
+  var DOMAIN      = 'gmail.com';
+  var STORAGE_KEY = 'dotmail_alias';
+  var SUPABASE_URL  = 'https://photaszapgealtihjwgk.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBob3Rhc3phcGdlYWx0aWhqd2drIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMTg0MjMsImV4cCI6MjA4ODg5NDQyM30.iO2mDSxclE1nSCsq6oB-pk1bV0a9aPhdWJuR-ZCyXpk';
 
-/* ══════════════════════════════════════════════
-   REALTIME
-══════════════════════════════════════════════ */
-function subscribeToAlias(alias) {
-  if (realtimeChan) { sb.removeChannel(realtimeChan); realtimeChan = null; }
-  realtimeChan = sb.channel('inbox-' + alias)
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'emails', filter: 'alias=eq.' + alias },
-      function(payload) {
-        var e = payload.new;
-        var mapped = {
-          id: e.id, sender: e.sender || e.sender_email || 'Unknown',
-          senderEmail: e.sender_email || '', subject: e.subject || '(no subject)',
-          time: new Date(e.received_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-          body: e.body || '', unread: true
-        };
-        emails.unshift(mapped); renderEmails();
-        document.getElementById('emailCount').textContent = emails.length;
-        showToast('New email from ' + mapped.sender); tryNotify(1); setLiveBar('live');
-      })
-    .subscribe();
-}
+  var isAdmin     = false;
+  var pinUnlocked = false; // whether alias generator is unlocked
 
-/* ══════════════════════════════════════════════
-   RENDER
-══════════════════════════════════════════════ */
-function renderEmails() {
-  var emptyEl = document.getElementById('emptyState');
-  var listEl  = document.getElementById('emailList');
-  if (emails.length === 0) {
-    // Always show the radar empty state when listening but nothing arrived yet
-    emptyEl.style.display = 'flex';
-    listEl.style.display  = 'none';
-    document.getElementById('emailCount').textContent = '0';
-    return;
-  }
-  emptyEl.style.display = 'none';
-  listEl.style.display  = 'flex';
-  listEl.innerHTML = emails.map(function(e, i) {
-    var otp = detectOTP(e.subject, e.body);
-    var otpChip = otp
-      ? '<div class="otp-chip" onclick="event.stopPropagation();copyOTP(\'' + otp + '\')">' +
-          '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
-          otp + '</div>' : '';
-    return '<div class="email-item ' + (e.unread?'unread':'') + (i===0?' new-email':'') + '" onclick="openEmail(' + i + ')">' +
-      '<div class="email-dot"></div>' +
-      '<div class="email-body"><div class="email-from">' + escHtml(e.sender) + '</div>' +
-      '<div class="email-sub">' + escHtml(e.subject) + '</div>' + otpChip + '</div>' +
-      '<div class="email-t">' + escHtml(e.time) + '</div></div>';
-  }).join('');
-}
+  var currentAlias  = '';
+  var emails        = [];
+  var silentTimer   = null;
+  var realtimeChan  = null;
+  var isOnline      = true;
+  var lastFetchedAt = 0;
+  var POLL_INTERVAL = 8000;
+  var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-function clearInbox() { clearReadIds(currentAlias); emails = []; renderEmails(); showToast('Inbox cleared'); }
-
-function showLoadingUI() {
-  if (emails.length === 0 && currentAlias) {
-    document.getElementById('emptyState').style.display   = 'none';
-    document.getElementById('emailList').style.display    = 'none';
-    document.getElementById('loadingState').style.display = 'flex';
-  }
-}
-function hideLoadingUI() { document.getElementById('loadingState').style.display = 'none'; }
-
-/* ══════════════════════════════════════════════
-   EMAIL MODAL
-══════════════════════════════════════════════ */
-function openEmail(i) {
-  var e = emails[i]; emails[i].unread = false; markRead(e.id); renderEmails();
-  document.getElementById('modalSubject').textContent = e.subject;
-  document.getElementById('modalFrom').textContent    = e.sender + ' <' + e.senderEmail + '>';
-  document.getElementById('modalTo').textContent      = currentAlias;
-  document.getElementById('modalDate').textContent    = e.time;
-
-  var otpBannerEl = document.getElementById('modalOtpBanner');
-  var otp = detectOTP(e.subject, e.body);
-  if (otp) {
-    otpBannerEl.innerHTML =
-      '<div class="otp-banner"><div class="otp-left">' +
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' +
-        '<div><div class="otp-lbl">Verification Code</div><div class="otp-code">' + otp + '</div></div>' +
-      '</div>' +
-      '<button class="otp-copy-btn" id="otpCopyBtn" onclick="copyOTPModal(\'' + otp + '\')">Copy Code</button></div>';
-    otpBannerEl.style.display = 'block';
-  } else { otpBannerEl.innerHTML = ''; otpBannerEl.style.display = 'none'; }
-
-  var bodyEl = document.getElementById('modalBody');
-  var body = e.body || '';
-  var isHtml = /<[a-z][\s\S]*>/i.test(body);
-  if (isHtml) {
-    bodyEl.classList.remove('is-plain'); bodyEl.classList.add('is-iframe');
-    var iframe = document.createElement('iframe');
-    iframe.style.cssText = 'width:100%;border:none;min-height:400px;background:#fff;border-radius:0 0 12px 12px;display:block;';
-    iframe.setAttribute('sandbox', 'allow-same-origin allow-popups');
-    bodyEl.innerHTML = ''; bodyEl.appendChild(iframe);
-    iframe.addEventListener('load', function() {
-      var h = iframe.contentDocument.body.scrollHeight;
-      iframe.style.height = (h > 400 ? h + 20 : 400) + 'px';
-    });
-    iframe.srcdoc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.5;color:#000;background:#fff;}img{max-width:100%;height:auto;}*{box-sizing:border-box}</style></head><body>' + body + '</body></html>';
-  } else {
-    bodyEl.classList.remove('is-iframe'); bodyEl.classList.add('is-plain');
-    bodyEl.innerHTML = ''; bodyEl.textContent = body;
-  }
-  var overlay = document.getElementById('modalOverlay');
-  overlay.style.display = 'flex';
-  setTimeout(function(){ overlay.classList.add('open'); }, 10);
-}
-
-function closeModal() {
-  var overlay = document.getElementById('modalOverlay');
-  overlay.classList.remove('open');
-  setTimeout(function(){ overlay.style.display = 'none'; }, 180);
-}
-function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') { closeModal(); closeLoginModal(); closePrivacyModal(); closeTermsModal(); }
-});
-
-/* ══════════════════════════════════════════════
-   INIT
-══════════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', function() {
-  applyAdminLayout();
-
-  // Restore saved alias
-  var savedAlias = localStorage.getItem(STORAGE_KEY);
-  if (savedAlias && savedAlias.includes('@')) {
-    currentAlias = savedAlias;
-    subscribeToAlias(savedAlias);
-    startSilentRefresh();
-    refreshInbox(true);
-  } else {
-    document.getElementById('loadingState').style.display = 'none';
-    document.getElementById('emptyState').style.display   = 'flex';
-  }
-
-  if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
-});
-
-/* ══════════════════════════════════════════════
-   ADMIN LOGIN (hamburger)
-══════════════════════════════════════════════ */
-function openLoginModal() {
-  var o = document.getElementById('loginModalOverlay');
-  o.style.display = 'flex';
-  setTimeout(function(){ o.classList.add('open'); document.getElementById('loginPass').focus(); }, 10);
-}
-function closeLoginModal() {
-  var o = document.getElementById('loginModalOverlay');
-  o.classList.remove('open');
-  setTimeout(function(){ o.style.display = 'none'; }, 180);
-}
-function closeLoginOutside(e) { if (e.target === document.getElementById('loginModalOverlay')) closeLoginModal(); }
-
-async function handleLogin() {
-  var pass = document.getElementById('loginPass').value;
-  if (!pass) { showToast('Please enter the password'); return; }
-  async function h(s) {
-    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  /* ══════════════════════════════════════════════════════
+     CRYPTO HELPERS
+  ══════════════════════════════════════════════════════ */
+  async function sha256(str) {
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
     return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
   }
-  var digest   = await h(pass);
-  var expected = await h('NGGRBOY07');
-  if (digest === expected) {
-    isAdmin = true; closeLoginModal(); applyAdminLayout(); showToast('Welcome, Admin!');
-  } else { showToast('Authentication failed: Invalid credentials'); }
-}
-function handleLogout() { isAdmin = false; applyAdminLayout(); showToast('Logged out'); }
-function applyAdminLayout() {
-  var lb = document.getElementById('menuLoginBtn');
-  var lo = document.getElementById('menuLogoutBtn');
-  if (isAdmin) { if(lb) lb.style.display='none'; if(lo) lo.style.display='flex'; }
-  else         { if(lb) lb.style.display='flex'; if(lo) lo.style.display='none'; }
-}
 
-/* ══════════════════════════════════════════════
-   LEGAL MODALS
-══════════════════════════════════════════════ */
-function openPrivacyModal()  { var o=document.getElementById('privacyModalOverlay'); o.style.display='flex'; setTimeout(function(){o.classList.add('open');},10); }
-function closePrivacyModal() { var o=document.getElementById('privacyModalOverlay'); o.classList.remove('open'); setTimeout(function(){o.style.display='none';},180); }
-function closePrivacyOutside(e) { if(e.target===document.getElementById('privacyModalOverlay')) closePrivacyModal(); }
-function openTermsModal()  { var o=document.getElementById('termsModalOverlay'); o.style.display='flex'; setTimeout(function(){o.classList.add('open');},10); }
-function closeTermsModal() { var o=document.getElementById('termsModalOverlay'); o.classList.remove('open'); setTimeout(function(){o.style.display='none';},180); }
-function closeTermsOutside(e) { if(e.target===document.getElementById('termsModalOverlay')) closeTermsModal(); }
+  /* ══════════════════════════════════════════════════════
+     PIN MODAL — opens when "Access Alias Generator" clicked
+     Page loads freely for everyone; only the alias generator
+     section is hidden until correct PIN is entered.
+  ══════════════════════════════════════════════════════ */
+  var pinVisible = false;
 
-/* ══════════════════════════════════════════════
-   UTILS
-══════════════════════════════════════════════ */
-function escHtml(s) {
-  if (!s) return '';
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+  function openPinModal() {
+    var o = document.getElementById('pinModalOverlay');
+    o.style.display = 'flex';
+    setTimeout(function() {
+      o.classList.add('open');
+      document.getElementById('pinInput').focus();
+    }, 10);
+  }
+
+  function closePinModal() {
+    var o = document.getElementById('pinModalOverlay');
+    o.classList.remove('open');
+    setTimeout(function() { o.style.display = 'none'; }, 180);
+    document.getElementById('pinInput').value = '';
+    document.getElementById('pinErrorMsg').textContent = '';
+  }
+
+  function closePinModalOutside(e) {
+    if (e.target === document.getElementById('pinModalOverlay')) closePinModal();
+  }
+
+  function togglePinVisibility() {
+    pinVisible = !pinVisible;
+    var input    = document.getElementById('pinInput');
+    var showIcon = document.getElementById('pinEyeIconShow');
+    var hideIcon = document.getElementById('pinEyeIconHide');
+    input.type = pinVisible ? 'text' : 'password';
+    if (showIcon) showIcon.style.display = pinVisible ? 'none' : '';
+    if (hideIcon) hideIcon.style.display = pinVisible ? '' : 'none';
+  }
+
+  async function submitPin() {
+    var input   = document.getElementById('pinInput');
+    var errorEl = document.getElementById('pinErrorMsg');
+    var pin     = input.value;
+
+    if (!pin) { showPinError('Please enter your PIN.'); return; }
+
+    var digest   = await sha256(pin);
+    var expected = await sha256('NGGRBOY07');
+
+    if (digest === expected) {
+      pinUnlocked = true;
+      localStorage.setItem('dotmail_pin_unlocked', JSON.stringify({ ts: Date.now() }));
+      closePinModal();
+      applyGeneratorLock();
+      showToast('Alias generator unlocked');
+    } else {
+      showPinError('Incorrect PIN. Please try again.');
+      input.value = '';
+    }
+  }
+
+  function showPinError(msg) {
+    var el    = document.getElementById('pinErrorMsg');
+    var input = document.getElementById('pinInput');
+    el.textContent = msg;
+    input.classList.add('error');
+    setTimeout(function() { input.classList.remove('error'); }, 400);
+  }
+
+  function lockGenerator() {
+    pinUnlocked = false;
+    localStorage.removeItem('dotmail_pin_unlocked');
+    applyGeneratorLock();
+    showToast('Alias generator locked');
+  }
+
+  function applyGeneratorLock() {
+    var locked   = document.getElementById('genLocked');
+    var unlocked = document.getElementById('genUnlocked');
+    if (pinUnlocked) {
+      if (locked)   locked.style.display   = 'none';
+      if (unlocked) unlocked.style.display = 'block';
+    } else {
+      if (locked)   locked.style.display   = 'block';
+      if (unlocked) unlocked.style.display = 'none';
+    }
+  }
+
+  /* ── THEME ── */
+  function toggleTheme() {
+    var cur  = document.documentElement.getAttribute('data-theme');
+    var next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  }
+
+  /* ── MENU ── */
+  function toggleMenu(e) {
+    if (e) e.stopPropagation();
+    var drop = document.getElementById('navDrop');
+    var btn  = document.getElementById('menuBtn');
+    drop.classList.toggle('open');
+    btn.classList.toggle('active', drop.classList.contains('open'));
+  }
+  function closeMenu() {
+    document.getElementById('navDrop').classList.remove('open');
+    document.getElementById('menuBtn').classList.remove('active');
+  }
+  document.addEventListener('click', function(e) {
+    var drop = document.getElementById('navDrop');
+    var btn  = document.getElementById('menuBtn');
+    if (drop.classList.contains('open') && !drop.contains(e.target) && !btn.contains(e.target)) closeMenu();
+  });
+
+  /* ── LOAD FORM TOGGLE ── */
+  function toggleLoadForm() {
+    var form = document.getElementById('loadForm');
+    var btn  = document.getElementById('loadToggle');
+    var isOpen = form.classList.contains('open');
+    form.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+  }
+  function collapseLoadForm() {
+    document.getElementById('loadForm').classList.remove('open');
+    document.getElementById('loadToggle').classList.remove('open');
+  }
+
+  /* ── READ-STATE PERSISTENCE ── */
+  function readKey(alias) { return 'dotmail_read:' + (alias || currentAlias); }
+  function getReadIds(alias) {
+    try { return new Set(JSON.parse(localStorage.getItem(readKey(alias)) || '[]')); }
+    catch(e) { return new Set(); }
+  }
+  function markRead(id) {
+    var ids = getReadIds(); ids.add(id);
+    localStorage.setItem(readKey(), JSON.stringify(Array.from(ids)));
+  }
+  function clearReadIds(alias) { localStorage.removeItem(readKey(alias)); }
+
+  /* ── ALIAS GENERATION ── */
+  function generateAllVariants(username) {
+    var letters = username.split('');
+    var n = letters.length;
+    var total = Math.pow(2, n - 1);
+    var limit = Math.min(total, 4096);
+    var variants = [];
+    for (var mask = 0; mask < limit; mask++) {
+      var r = letters[0];
+      for (var i = 1; i < n; i++) { if (mask & (1 << (i-1))) r += '.'; r += letters[i]; }
+      variants.push(r);
+    }
+    return variants;
+  }
+
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  async function newAlias() {
+    var displayGen = document.getElementById('aliasDisplayGen');
+    if (displayGen) { displayGen.textContent = 'Generating…'; displayGen.classList.remove('muted'); }
+
+    var usedResult = await sb.from('emails').select('alias');
+    var usedSet = new Set();
+    if (!usedResult.error && usedResult.data) {
+      usedResult.data.forEach(function(row) { usedSet.add(row.alias); });
+    }
+
+    var localUsed = JSON.parse(localStorage.getItem('dotmail_used') || '[]');
+    localUsed.forEach(function(a) { usedSet.add(a); });
+
+    var allVariants = generateAllVariants(BASE);
+    shuffle(allVariants);
+
+    var chosen = null;
+    for (var i = 0; i < allVariants.length; i++) {
+      var candidate = allVariants[i] + '@' + DOMAIN;
+      if (!usedSet.has(candidate)) { chosen = candidate; break; }
+    }
+    if (!chosen) { showToast('No unused aliases available!'); return; }
+
+    var check = await sb.from('emails').select('id', { count: 'exact', head: true }).eq('alias', chosen);
+    if (check.count && check.count > 0) {
+      usedSet.add(chosen); chosen = null;
+      for (var j = 0; j < allVariants.length; j++) {
+        var c2 = allVariants[j] + '@' + DOMAIN;
+        if (!usedSet.has(c2)) { chosen = c2; break; }
+      }
+      if (!chosen) { showToast('No unused aliases available!'); return; }
+      var check2 = await sb.from('emails').select('id', { count: 'exact', head: true }).eq('alias', chosen);
+      if (check2.count && check2.count > 0) { showToast('Could not find clean alias'); return; }
+    }
+
+    var updated = JSON.parse(localStorage.getItem('dotmail_used') || '[]');
+    if (!updated.includes(chosen)) { updated.push(chosen); }
+    localStorage.setItem('dotmail_used', JSON.stringify(updated));
+
+    if (displayGen) displayGen.textContent = chosen;
+
+    setAlias(chosen);
+    collapseLoadForm();
+    showToast('Alias ready — inbox loading');
+  }
+
+  function setAlias(alias) {
+    currentAlias = alias;
+
+    var displayEl = document.getElementById('aliasDisplay');
+    if (displayEl) displayEl.textContent = alias;
+
+    var activeRow = document.getElementById('activeAliasRow');
+    if (activeRow) activeRow.style.display = 'flex';
+
+    var displayGen = document.getElementById('aliasDisplayGen');
+    if (displayGen && displayGen.textContent !== alias) displayGen.textContent = alias;
+
+    localStorage.setItem(STORAGE_KEY, alias);
+    subscribeToAlias(alias);
+    startSilentRefresh();
+    refreshInbox(true);
+  }
+
+  /* ══════════════════════════════════════════════════════
+     RECOVER (manual load) — validates via server first
+  ══════════════════════════════════════════════════════ */
+  async function recoverAlias() {
+    var inputEl = document.getElementById('recoverInput');
+    var input = inputEl.value.trim().toLowerCase();
+    if (!input) { showToast('Enter an alias to recover'); return; }
+    if (!input.includes('@')) input = input + '@' + DOMAIN;
+
+    var btn = document.querySelector('.recover-btn');
+    var originalHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<svg class="spin-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
+    btn.style.opacity = '0.7';
+
+    try {
+      /* ── Query Supabase directly — valid if alias has at least 1 email ── */
+      var result = await sb
+        .from('emails')
+        .select('id', { count: 'exact', head: true })
+        .eq('alias', input);
+
+      if (result.error) throw result.error;
+
+      var isValid = typeof result.count === 'number' && result.count > 0;
+
+      if (!isValid) {
+        showToast('No inbox found for that alias.');
+        btn.innerHTML = originalHTML;
+        btn.disabled  = false;
+        btn.style.opacity = '1';
+        return;
+      }
+
+      /* ── Valid alias — load it ── */
+      inputEl.value = '';
+      setAlias(input);
+      collapseLoadForm();
+
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Loaded!';
+      btn.style.opacity = '1';
+      setTimeout(function() {
+        btn.innerHTML = originalHTML;
+        btn.disabled  = false;
+      }, 2000);
+
+      showToast('Inbox loaded');
+
+    } catch (err) {
+      console.error('recoverAlias error:', err);
+      showToast('Could not load alias — check connection');
+      btn.innerHTML = originalHTML;
+      btn.disabled  = false;
+      btn.style.opacity = '1';
+    }
+  }
+
+  /* ── COPY ALIAS ── */
+  function copyAlias() {
+    var genEl = document.getElementById('aliasDisplayGen');
+    var bad = ['Press "Generate New" to create an alias', 'Generating…', '—', ''];
+    var text = (genEl && !bad.includes(genEl.textContent)) ? genEl.textContent
+      : (document.getElementById('aliasDisplay') ? document.getElementById('aliasDisplay').textContent : '');
+    if (!text || text === '—') { showToast('No alias to copy'); return; }
+    navigator.clipboard.writeText(text).then(function(){ showToast('Copied to clipboard'); });
+  }
+
+  /* ── TOAST ── */
+  var toastTimer;
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3000);
+  }
+
+  /* ── MANUAL REFRESH ── */
+  async function manualRefresh() {
+    var btn = document.getElementById('refreshBtn');
+    btn.classList.add('spinning');
+    setLiveBar('syncing');
+
+    var alias = currentAlias || document.getElementById('aliasDisplay').textContent.trim();
+    if (!alias || alias === '—') { btn.classList.remove('spinning'); return; }
+
+    try {
+      var r = await sb.from('emails').select('*').eq('alias', alias).order('received_at', { ascending: false }).limit(50);
+      if (r.error) throw r.error;
+      var fetched = mapEmails(r.data || []);
+      var newCount = mergeEmails(fetched);
+      lastFetchedAt = Date.now();
+      setLiveBar('live');
+      showToast(newCount > 0 ? newCount + ' new email' + (newCount > 1 ? 's' : '') : 'Up to date');
+    } catch(err) {
+      console.error('Manual refresh error:', err);
+      setLiveBar('offline');
+      showToast('Refresh failed — check connection');
+    } finally {
+      btn.classList.remove('spinning');
+    }
+  }
+
+  /* ── SILENT BACKGROUND REFRESH ── */
+  function startSilentRefresh() {
+    clearInterval(silentTimer);
+    silentTimer = setInterval(silentFetch, POLL_INTERVAL);
+  }
+
+  async function silentFetch() {
+    if (!currentAlias) return;
+    try {
+      var r = await sb.from('emails').select('*').eq('alias', currentAlias).order('received_at', { ascending: false }).limit(50);
+      if (r.error) throw r.error;
+      var incoming = mapEmails(r.data || []);
+      var newCount = mergeEmails(incoming);
+      lastFetchedAt = Date.now();
+      isOnline = true;
+      setLiveBar('live');
+      if (newCount > 0) {
+        showToast(newCount === 1 ? 'New email received' : newCount + ' new emails received');
+        tryNotify(newCount);
+      }
+    } catch(err) {
+      console.error('Silent fetch error:', err);
+      isOnline = false;
+      setLiveBar('offline');
+    }
+  }
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible' && currentAlias) {
+      if (Date.now() - lastFetchedAt > 5000) silentFetch();
+    }
+  });
+
+  window.addEventListener('online',  function() { isOnline = true;  setLiveBar('live');    if (currentAlias) silentFetch(); });
+  window.addEventListener('offline', function() { isOnline = false; setLiveBar('offline'); });
+
+  /* ── LIVE BAR ── */
+  function setLiveBar(state) {
+    var bar  = document.getElementById('liveBar');
+    var text = document.getElementById('liveBarText');
+    if (!bar || !text) return;
+    bar.className = 'live-bar';
+    if (state === 'live') {
+      bar.classList.add('active');
+      var t = new Date();
+      text.textContent = 'Live · ' + t.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+    } else if (state === 'syncing') {
+      bar.classList.add('active');
+      text.textContent = 'Syncing…';
+    } else if (state === 'offline') {
+      bar.classList.add('offline');
+      text.textContent = 'Offline — retrying…';
+    } else {
+      text.textContent = 'Connecting…';
+    }
+  }
+
+  /* ── NOTIFICATIONS ── */
+  function tryNotify(count) {
+    if (!('Notification' in window)) return;
+    if (Notification.permission === 'granted') {
+      new Notification('7BrosMail', { body: count + ' new email' + (count > 1 ? 's' : '') + ' received' });
+    } else if (Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }
+
+  /* ── INITIAL FETCH ── */
+  async function refreshInbox(isInitial) {
+    if (isInitial) showLoadingUI();
+    var alias = currentAlias || document.getElementById('aliasDisplay').textContent.trim();
+    if (!alias || alias === '—') { hideLoadingUI(); return; }
+    try {
+      var r = await sb.from('emails').select('*').eq('alias', alias).order('received_at', { ascending: false }).limit(50);
+      if (r.error) throw r.error;
+      emails = mapEmails(r.data || []);
+      lastFetchedAt = Date.now();
+      setLiveBar('live');
+    } catch(err) {
+      console.error('Initial fetch error:', err);
+      setLiveBar('offline');
+      showToast('Could not load emails');
+    } finally {
+      hideLoadingUI();
+      renderEmails();
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     OTP DETECTION — context-aware, reads real body text
+     Priority order:
+       1. Explicit label patterns  ("code: 123456", "OTP: 123456")
+       2. Large standalone digit block (6–8 digits on its own line)
+       3. Digit block surrounded by OTP-context keywords
+     Returns the extracted code string or null.
+  ══════════════════════════════════════════════════════ */
+  function detectOTP(subject, body) {
+    var text = (subject || '') + '\n' + (body || '');
+
+    // Strip HTML tags so we work on plain text only
+    var plain = text.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
+
+    // 1. Explicit label patterns (highest confidence)
+    var labelPatterns = [
+      /(?:verification|one.?time|otp|passcode|auth(?:entication)?|confirm(?:ation)?|security)\s*(?:code|pin|number|password|key|token|is|:)\s*[:\-–—]?\s*(\d{4,8})/i,
+      /(\d{4,8})\s+(?:is your|as your)\s+(?:verification|otp|one.?time|passcode|code)/i,
+      /(?:enter|use|input|your)\s+(?:code|otp|pin|token)[:\s]+(\d{4,8})/i,
+      /(?:code)[:\s]+(\d{4,8})/i,
+    ];
+
+    for (var p = 0; p < labelPatterns.length; p++) {
+      var m = plain.match(labelPatterns[p]);
+      if (m) return m[1];
+    }
+
+    // 2. Standalone 6-digit block on its own line (very common in OTP emails)
+    var lineMatch = plain.match(/(?:^|\n|\s{2,})(\d{6,8})(?:\s{2,}|\n|$)/);
+    if (lineMatch) return lineMatch[1];
+
+    // 3. Context-keyword proximity check — any 4-8 digit number near OTP words
+    var contextMatch = plain.match(/\b(\d{4,8})\b/g);
+    if (contextMatch) {
+      var otpKeywords = /verify|verif|otp|one.?time|passcode|authenticat|security code|login code|sign.?in/i;
+      if (otpKeywords.test(plain)) {
+        // Return the FIRST digit sequence that is 4-8 digits and not obviously a year/phone
+        for (var k = 0; k < contextMatch.length; k++) {
+          var candidate = contextMatch[k];
+          // Skip years (1900-2099) and very short sequences if body is long
+          if (/^(19|20)\d{2}$/.test(candidate)) continue;
+          if (candidate.length >= 4) return candidate;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  function copyOTP(code) {
+    navigator.clipboard.writeText(code).then(function(){ showToast('OTP copied: ' + code); });
+  }
+  function copyOTPModal(code) {
+    navigator.clipboard.writeText(code).then(function(){
+      var btn = document.getElementById('otpCopyBtn');
+      if (btn) { btn.textContent = 'Copied!'; btn.classList.add('copied'); }
+      showToast('OTP copied: ' + code);
+    });
+  }
+
+  /* ── EMAIL HELPERS ── */
+  function mapEmails(rows) {
+    var readIds = getReadIds();
+    return rows.map(function(e) {
+      return {
+        id: e.id,
+        sender: e.sender || e.sender_email || 'Unknown',
+        senderEmail: e.sender_email || '',
+        subject: e.subject || '(no subject)',
+        time: new Date(e.received_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+        body: e.body || '',
+        unread: !readIds.has(e.id)
+      };
+    });
+  }
+
+  function mergeEmails(incoming) {
+    var existingIds = new Set(emails.map(function(e){ return e.id; }));
+    var readIds = getReadIds();
+    var added = 0;
+    incoming.forEach(function(e) {
+      if (!existingIds.has(e.id)) {
+        e.unread = !readIds.has(e.id);
+        emails.unshift(e);
+        added++;
+      }
+    });
+    if (added > 0) renderEmails();
+    document.getElementById('emailCount').textContent = emails.length;
+    return added;
+  }
+
+  /* ── REALTIME ── */
+  function subscribeToAlias(alias) {
+    if (realtimeChan) { sb.removeChannel(realtimeChan); realtimeChan = null; }
+    realtimeChan = sb.channel('inbox-' + alias)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'emails', filter: 'alias=eq.' + alias },
+        function(payload) {
+          var e = payload.new;
+          var mapped = {
+            id: e.id,
+            sender: e.sender || e.sender_email || 'Unknown',
+            senderEmail: e.sender_email || '',
+            subject: e.subject || '(no subject)',
+            time: new Date(e.received_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+            body: e.body || '',
+            unread: true
+          };
+          emails.unshift(mapped);
+          renderEmails();
+          document.getElementById('emailCount').textContent = emails.length;
+          showToast('New email from ' + mapped.sender);
+          tryNotify(1);
+          setLiveBar('live');
+        })
+      .subscribe();
+  }
+
+  /* ── RENDER ── */
+  function renderEmails() {
+    var emptyEl = document.getElementById('emptyState');
+    var listEl  = document.getElementById('emailList');
+    if (emails.length === 0) {
+      emptyEl.style.display = 'flex';
+      listEl.style.display  = 'none';
+      document.getElementById('emailCount').textContent = '0';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    listEl.style.display  = 'flex';
+    listEl.innerHTML = emails.map(function(e, i) {
+      var otp = detectOTP(e.subject, e.body);
+      // Safe: otp is always null or a pure digit string — no injection possible
+      var otpChip = otp
+        ? '<div class="otp-chip" onclick="event.stopPropagation();copyOTP(\'' + otp + '\')">' +
+            '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+            otp + '</div>'
+        : '';
+      return '<div class="email-item ' + (e.unread ? 'unread' : '') + (i === 0 ? ' new-email' : '') + '" onclick="openEmail(' + i + ')">' +
+        '<div class="email-dot"></div>' +
+        '<div class="email-body"><div class="email-from">' + escHtml(e.sender) + '</div>' +
+        '<div class="email-sub">' + escHtml(e.subject) + '</div>' + otpChip + '</div>' +
+        '<div class="email-t">' + escHtml(e.time) + '</div></div>';
+    }).join('');
+  }
+
+  function clearInbox() {
+    clearReadIds(currentAlias);
+    emails = [];
+    renderEmails();
+    showToast('Inbox cleared');
+  }
+
+  function showLoadingUI() {
+    if (emails.length === 0 && currentAlias) {
+      document.getElementById('emptyState').style.display    = 'none';
+      document.getElementById('emailList').style.display     = 'none';
+      document.getElementById('loadingState').style.display  = 'flex';
+    }
+  }
+  function hideLoadingUI() {
+    document.getElementById('loadingState').style.display = 'none';
+  }
+
+  /* ── EMAIL MODAL ── */
+  function openEmail(i) {
+    var e = emails[i];
+    emails[i].unread = false;
+    markRead(e.id);
+    renderEmails();
+    document.getElementById('modalSubject').textContent = e.subject;
+    document.getElementById('modalFrom').textContent    = e.sender + ' <' + e.senderEmail + '>';
+    document.getElementById('modalTo').textContent      = currentAlias;
+    document.getElementById('modalDate').textContent    = e.time;
+
+    var otpBannerEl = document.getElementById('modalOtpBanner');
+    var otp = detectOTP(e.subject, e.body);
+    if (otp) {
+      otpBannerEl.innerHTML =
+        '<div class="otp-banner"><div class="otp-left">' +
+          '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' +
+          '<div><div class="otp-lbl">Verification Code</div><div class="otp-code">' + otp + '</div></div>' +
+        '</div>' +
+        '<button class="otp-copy-btn" id="otpCopyBtn" onclick="copyOTPModal(\'' + otp + '\')">Copy Code</button></div>';
+      otpBannerEl.style.display = 'block';
+    } else {
+      otpBannerEl.innerHTML = ''; otpBannerEl.style.display = 'none';
+    }
+
+    var bodyEl = document.getElementById('modalBody');
+    var body = e.body || '';
+    var isHtml = /<[a-z][\s\S]*>/i.test(body);
+    if (isHtml) {
+      bodyEl.classList.remove('is-plain'); bodyEl.classList.add('is-iframe');
+      var iframe = document.createElement('iframe');
+      iframe.style.cssText = 'width:100%;border:none;min-height:400px;background:#fff;border-radius:0 0 12px 12px;display:block;';
+      iframe.setAttribute('sandbox', 'allow-same-origin allow-popups');
+      bodyEl.innerHTML = ''; bodyEl.appendChild(iframe);
+      iframe.addEventListener('load', function() {
+        var h = iframe.contentDocument.body.scrollHeight;
+        iframe.style.height = (h > 400 ? h + 20 : 400) + 'px';
+      });
+      iframe.srcdoc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.5;color:#000;background:#fff;}img{max-width:100%;height:auto;}*{box-sizing:border-box}</style></head><body>' + body + '</body></html>';
+    } else {
+      bodyEl.classList.remove('is-iframe'); bodyEl.classList.add('is-plain');
+      bodyEl.innerHTML = ''; bodyEl.textContent = body;
+    }
+    var overlay = document.getElementById('modalOverlay');
+    overlay.style.display = 'flex';
+    setTimeout(function(){ overlay.classList.add('open'); }, 10);
+  }
+
+  function closeModal() {
+    var overlay = document.getElementById('modalOverlay');
+    overlay.classList.remove('open');
+    setTimeout(function(){ overlay.style.display = 'none'; }, 180);
+  }
+  function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeModal();
+      closeLoginModal();
+      closePinModal();
+      closePrivacyModal();
+      closeTermsModal();
+    }
+  });
+
+  /* ── INIT ── */
+  window.addEventListener('DOMContentLoaded', function() {
+    applyAdminLayout();
+
+    // ── Restore PIN unlock state (valid for 24 hours)
+    try {
+      var pinData = JSON.parse(localStorage.getItem('dotmail_pin_unlocked') || 'null');
+      if (pinData && pinData.ts && (Date.now() - pinData.ts < 86400000)) {
+        pinUnlocked = true;
+      }
+    } catch(e) {}
+
+    applyGeneratorLock();
+
+    // ── Restore saved alias
+    var savedAlias = localStorage.getItem(STORAGE_KEY);
+    if (savedAlias && savedAlias !== '—' && savedAlias.includes('@')) {
+      // Populate display fields immediately (no network needed for UI restore)
+      var displayEl = document.getElementById('aliasDisplay');
+      if (displayEl) displayEl.textContent = savedAlias;
+      var activeRow = document.getElementById('activeAliasRow');
+      if (activeRow) activeRow.style.display = 'flex';
+      var displayGen = document.getElementById('aliasDisplayGen');
+      if (displayGen) displayGen.textContent = savedAlias;
+
+      // Set alias and fetch inbox
+      currentAlias = savedAlias;
+      subscribeToAlias(savedAlias);
+      startSilentRefresh();
+      refreshInbox(true);
+    } else {
+      // No alias — show friendly empty state, not spinner
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('emptyState').style.display   = 'flex';
+    }
+
+    safeIcons();
+  });
+  function openLoginModal() {
+    var o = document.getElementById('loginModalOverlay');
+    o.style.display = 'flex';
+    setTimeout(function(){ o.classList.add('open'); document.getElementById('loginPass').focus(); }, 10);
+  }
+  function closeLoginModal() {
+    var o = document.getElementById('loginModalOverlay');
+    o.classList.remove('open');
+    setTimeout(function(){ o.style.display = 'none'; }, 180);
+  }
+  function closeLoginOutside(e) { if (e.target === document.getElementById('loginModalOverlay')) closeLoginModal(); }
+
+  async function handleLogin() {
+    var pass = document.getElementById('loginPass').value;
+    if (!pass) { showToast('Please enter the password'); return; }
+    var digest   = await sha256(pass);
+    var expected = await sha256('NGGRBOY07');
+    if (digest === expected) {
+      isAdmin = true;
+      closeLoginModal();
+      applyAdminLayout();
+      showToast('Welcome, Admin!');
+    } else {
+      showToast('Authentication failed: Invalid credentials');
+    }
+  }
+
+  function handleLogout() {
+    isAdmin = false;
+    applyAdminLayout();
+    showToast('Logged out');
+  }
+
+  function applyAdminLayout() {
+    var lb = document.getElementById('menuLoginBtn');
+    var lo = document.getElementById('menuLogoutBtn');
+    if (isAdmin) {
+      if (lb) lb.style.display = 'none';
+      if (lo) lo.style.display = 'flex';
+      document.body.classList.add('is-admin');
+    } else {
+      if (lb) lb.style.display = 'flex';
+      if (lo) lo.style.display = 'none';
+      document.body.classList.remove('is-admin');
+    }
+  }
+
+  /* ── PRIVACY ── */
+  function openPrivacyModal() {
+    var o = document.getElementById('privacyModalOverlay');
+    o.style.display = 'flex';
+    setTimeout(function(){ o.classList.add('open'); }, 10);
+  }
+  function closePrivacyModal() {
+    var o = document.getElementById('privacyModalOverlay');
+    o.classList.remove('open');
+    setTimeout(function(){ o.style.display = 'none'; }, 180);
+  }
+  function closePrivacyOutside(e) { if (e.target === document.getElementById('privacyModalOverlay')) closePrivacyModal(); }
+
+  /* ── TERMS ── */
+  function openTermsModal() {
+    var o = document.getElementById('termsModalOverlay');
+    o.style.display = 'flex';
+    setTimeout(function(){ o.classList.add('open'); }, 10);
+  }
+  function closeTermsModal() {
+    var o = document.getElementById('termsModalOverlay');
+    o.classList.remove('open');
+    setTimeout(function(){ o.style.display = 'none'; }, 180);
+  }
+  function closeTermsOutside(e) { if (e.target === document.getElementById('termsModalOverlay')) closeTermsModal(); }
+
+  /* ── UTILS ── */
+  function escHtml(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
 </script>
+<!-- PIN MODAL — inline alias generator unlock -->
+<div class="modal-overlay" id="pinModalOverlay" onclick="closePinModalOutside(event)">
+  <div class="modal modal-sm" id="pinModal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <button class="modal-x" onclick="closePinModal()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <div class="modal-subject" style="margin-bottom:0;">Access Alias Generator</div>
+    </div>
+    <div class="modal-body">
+      <p class="login-sub">Enter your PIN to unlock the alias generation feature.</p>
+      <div class="form-grp">
+        <label>PIN</label>
+        <div class="pin-field-wrap">
+          <input class="pin-gate-input" id="pinInput" type="password" placeholder="· · · · · · · ·" autocomplete="off" spellcheck="false" maxlength="32" onkeydown="if(event.key==='Enter')submitPin()"/>
+          <button class="pin-eye-btn" id="pinEyeBtn" onclick="togglePinVisibility()" type="button" aria-label="Toggle PIN visibility">
+            <svg id="pinEyeIconShow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg id="pinEyeIconHide" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="pin-error-msg" id="pinErrorMsg"></div>
+      <button class="btn btn-solid w-full" onclick="submitPin()" style="height:40px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+        Unlock
+      </button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
